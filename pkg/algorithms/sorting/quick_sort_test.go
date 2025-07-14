@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestInsertionSort(t *testing.T) {
+func TestQuickSort(t *testing.T) {
 	cases := []struct {
 		name string
 		input []int
@@ -20,19 +20,19 @@ func TestInsertionSort(t *testing.T) {
 	for _, c := range cases {
 		arr := make([]int, len(c.input))
 		copy(arr, c.input)
-		InsertionSort(arr)
+		QuickSort(arr, 0, len(arr)-1)
 		if !reflect.DeepEqual(arr, c.expect) {
 			t.Errorf("%s: got %v, want %v", c.name, arr, c.expect)
 		}
 	}
 }
 
-func BenchmarkInsertionSort(b *testing.B) {
+func BenchmarkQuickSort(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		arr := make([]int, 1000)
 		for i := range arr {
 			arr[i] = 1000 - i
 		}
-		InsertionSort(arr)
+		QuickSort(arr, 0, len(arr)-1)
 	}
 } 

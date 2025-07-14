@@ -1,8 +1,5 @@
 package sorting
 
-import (
-	"fmt"
-)
 
 func BubbleSort (arr[]int) {
 	size := len(arr)
@@ -13,11 +10,5 @@ func BubbleSort (arr[]int) {
 				arr[j], arr[j+1] = arr[j+1], arr[j]
 			}
 		}
-	}
-
-	fmt.Println("Newly sorted array")
-	
-	for i:=0; i < size - 1; i++{
-		fmt.Printf("%d, ", arr[i])
 	}
 }
