@@ -21,7 +21,7 @@ func (lq *LinkedQueue) IsEmpty() bool {
 }
 
 func (lq *LinkedQueue) Enqueue(x any) {
-	newNode := &Node{value: x, next: nil}
+	newNode := &Node{val: x, next: nil}
 	if lq.IsEmpty() {
 		lq.front = newNode
 	} else {
@@ -55,5 +55,5 @@ func (lq *LinkedQueue) Peek() (any, error) {
 		return nil, errors.New("cannot peek an empty queue")
 	}
 
-	return lq.front.value, nil
+	return lq.front.val, nil
 }

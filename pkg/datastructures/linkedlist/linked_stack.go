@@ -2,11 +2,6 @@ package linkedlist
 
 import "errors"
 
-type Node struct {
-	value any
-	next *Node
-}
-
 type SinglyLinkedList struct {
 	head *Node
 	size int
@@ -26,7 +21,7 @@ func (sl *SinglyLinkedList) IsEmpty() bool {
 
 func (sl *SinglyLinkedList) Push(x any) {
 	new_node := &Node{
-		value: x,
+		val: x,
 		next: sl.head,
 	}
 
@@ -43,7 +38,7 @@ func (sl *SinglyLinkedList) Pop() (any, error) {
 	sl.head = sl.head.next
 	sl.size--
 
-	return popped_node.value, nil
+	return popped_node.val, nil
 }
 
 func (sl *SinglyLinkedList) Peek() (any, error) {
@@ -52,5 +47,5 @@ func (sl *SinglyLinkedList) Peek() (any, error) {
 		return nil, errors.New("cannot peek an empty list")
 	}
 
-	return sl.head.value, nil
+	return sl.head.val, nil
 }
