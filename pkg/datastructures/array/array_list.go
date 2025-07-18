@@ -1,29 +1,30 @@
 package array
 
 import (
+	"cmp"
 	"errors"
 	"fmt"
 	"strings"
 )
 
-type ArrayList struct {
-	arr []any
+type ArrayList[T cmp.Ordered] struct {
+	arr []T
 	size int
 }
 
-func NewArrayList() *ArrayList {
-	return &ArrayList{arr: make([]any, 10), size: 0}
+func NewArrayList[T cmp.Ordered]() *ArrayList[T] {
+	return &ArrayList[T]{arr: make([]T, 10), size: 0}
 }
 
-func (al *ArrayList) Size() int {
+func (al *ArrayList[T]) Size() int {
 	return al.size
 }
 
-func (al *ArrayList) IsEmpty() bool {
+func (al *ArrayList[T]) IsEmpty() bool {
 	return al.size == 0
 }
 
-func (al *ArrayList) Add(index int, elem any) (error) {
+func (al *ArrayList[T]) Add(index int, elem T) (error) {
 	if index < 0 || index > al.size {
 		return  errors.New("index out of bounds")
 	}
@@ -46,14 +47,15 @@ func (al *ArrayList) Add(index int, elem any) (error) {
 	
 	return nil
 }
-func (al *ArrayList) Get(index int) (any, error) {
+func (al *ArrayList[T]) Get(index int) (T, error) {
 	if index < 0 || index >= al.size {
-		return nil, errors.New("index out of bounds")
+		var zero T
+		return zero, errors.New("index out of bounds")
 	}
 
 	return al.arr[index], nil
 }
-func (al *ArrayList) Set(index int, elem any) (error) {
+func (al *ArrayList[T]) Set(index int, elem T) (error) {
 	if index < 0 || index >= al.size {
 		return errors.New("index out of bounds")
 	}
@@ -61,10 +63,11 @@ func (al *ArrayList) Set(index int, elem any) (error) {
 	al.arr[index] = elem
 	return nil
 }
-func (al *ArrayList) Remove(index int) (any, error) {
+func (al *ArrayList[T]) Remove(index int) (T, error) {
+	var zero T
 
 	if index < 0 || index >= al.size {
-		return nil, errors.New("index out of bounds")
+		return zero, errors.New("index out of bounds")
 	}
 
 	removedVal := al.arr[index]
@@ -72,7 +75,7 @@ func (al *ArrayList) Remove(index int) (any, error) {
 	for i := index + 1; i < al.size; i++ {
 		al.arr[i - 1] = al.arr[i]
 	}
-	al.arr[al.size - 1] = nil
+	al.arr[al.size - 1] = zero
 	al.size--
 
 	if al.size * 3 <= len(al.arr) {
@@ -81,7 +84,7 @@ func (al *ArrayList) Remove(index int) (any, error) {
 	return removedVal, nil
 }
 
-func (al *ArrayList) String() string {
+func (al *ArrayList[T]) String() string {
     if al.size == 0 {
         return "ArrayList: [] (Size: 0)"
     }
@@ -98,17 +101,17 @@ func (al *ArrayList) String() string {
     return sb.String()
 }
 
-func (al *ArrayList) resize() {
+func (al *ArrayList[T]) resize() {
 	oldArray := al.arr
 
-	al.arr = make([]any, len(al.arr) * 2)
+	al.arr = make([]T, len(al.arr) * 2)
 	for i := 0; i < al.size; i++ {
 		al.arr[i] = oldArray[i]
 	}
 }
-func (al *ArrayList) shrink() {
+func (al *ArrayList[T]) shrink() {
 	oldArray := al.arr
-	al.arr = make([]any, len(al.arr) / 2)
+	al.arr = make([]T, len(al.arr) / 2)
 
 	for i := 0; i < al.size; i++ {
 		al.arr[i] = oldArray[i]

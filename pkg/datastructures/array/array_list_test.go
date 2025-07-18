@@ -5,7 +5,7 @@ import (
 )
 
 func TestNewArrayList(t *testing.T) {
-	al := NewArrayList()
+	al := NewArrayList[int]()
 	if al.size != 0 {
 		t.Errorf("Expected size to be 0, but got %d", al.size)
 	}
@@ -18,7 +18,7 @@ func TestNewArrayList(t *testing.T) {
 }
 
 func TestArrayList_Add(t *testing.T) {
-	al := NewArrayList()
+	al := NewArrayList[int]()
 
 	// Add at the end
 	err := al.Add(0, 100)
@@ -75,7 +75,7 @@ func TestArrayList_Add(t *testing.T) {
 }
 
 func TestArrayList_Get(t *testing.T) {
-	al := NewArrayList()
+	al := NewArrayList[int]()
 	al.Add(0, 10)
 	al.Add(1, 20)
 
@@ -100,7 +100,7 @@ func TestArrayList_Get(t *testing.T) {
 }
 
 func TestArrayList_Set(t *testing.T) {
-	al := NewArrayList()
+	al := NewArrayList[int]()
 	al.Add(0, 10)
 	al.Add(1, 20)
 
@@ -126,7 +126,7 @@ func TestArrayList_Set(t *testing.T) {
 }
 
 func TestArrayList_Remove(t *testing.T) {
-	al := NewArrayList()
+	al := NewArrayList[int]()
 	al.Add(0, 10)
 	al.Add(1, 20)
 	al.Add(2, 30)
@@ -181,7 +181,7 @@ func TestArrayList_Remove(t *testing.T) {
 }
 
 func TestArrayList_ResizeAndShrink(t *testing.T) {
-	al := NewArrayList()
+	al := NewArrayList[int]()
 
 	// 1. Add 21 elements to trigger two resizes.
 	// 0 -> 10 elements (cap 10)
@@ -217,13 +217,13 @@ func TestArrayList_ResizeAndShrink(t *testing.T) {
 }
 
 func TestArrayList_String(t *testing.T) {
-	al := NewArrayList()
+	al := NewArrayList[string]()
 	expectedEmpty := "ArrayList: [] (Size: 0)"
 	if al.String() != expectedEmpty {
 		t.Errorf("Expected '%s', but got '%s'", expectedEmpty, al.String())
 	}
 
-	al.Add(0, 10)
+	al.Add(0, "10")
 	al.Add(1, "hello")
 	expectedPopulated := "ArrayList: [10, hello] (Size: 2)"
 	if al.String() != expectedPopulated {
@@ -233,7 +233,7 @@ func TestArrayList_String(t *testing.T) {
 
 func BenchmarkArrayList_Add(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		al := NewArrayList()
+		al := NewArrayList[int]()
 		for i := 0; i < 1000; i++ {
 			al.Add(al.Size(), i)
 		}
@@ -241,7 +241,7 @@ func BenchmarkArrayList_Add(b *testing.B) {
 }
 
 func BenchmarkArrayList_Get(b *testing.B) {
-	al := NewArrayList()
+	al := NewArrayList[int]()
 	for i := 0; i < 1000; i++ {
 		al.Add(al.Size(), i)
 	}
@@ -252,7 +252,7 @@ func BenchmarkArrayList_Get(b *testing.B) {
 }
 
 func BenchmarkArrayList_Set(b *testing.B) {
-	al := NewArrayList()
+	al := NewArrayList[int]()
 	for i := 0; i < 1000; i++ {
 		al.Add(al.Size(), i)
 	}
@@ -264,7 +264,7 @@ func BenchmarkArrayList_Set(b *testing.B) {
 
 func BenchmarkArrayList_Remove(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		al := NewArrayList()
+		al := NewArrayList[int]()
 		for i := 0; i < 1000; i++ {
 			al.Add(al.Size(), i)
 		}

@@ -1,9 +1,9 @@
 package common
 
-type List interface {
+type List[T any] interface {
 	Collection
-	Add(index int, elem any) (error)
-	Get(index int) (any, error)
-	Set(index int, elem any) (error)
-	Remove(index int) (any, error)
+	Add(index int, elem T) (error)
+	Get(index int) (T, error)
+	Set(index int, elem T) (error)
+	Remove(index int) (T, error)
 }
