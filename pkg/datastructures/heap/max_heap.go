@@ -7,19 +7,19 @@ import (
 	"fmt"
 )
 
-type MinHeap[T cmp.Ordered] struct {
+type MaxHeap[T cmp.Ordered] struct {
 	heap *array.ArrayList[T]
 	size int
 }
 
-func NewMinHeap[T cmp.Ordered]() *MinHeap[T] {
-	return &MinHeap[T]{
+func NewMaxHeap[T cmp.Ordered]() *MaxHeap[T] {
+	return &MaxHeap[T]{
 		heap: array.NewArrayList[T](),
 		size: 0,
 	}
 }
 
-func (mh *MinHeap[T]) BuildHeap(arr *array.ArrayList[T]) error {
+func (mh *MaxHeap[T]) BuildHeap(arr *array.ArrayList[T]) error {
 	mh.heap = arr
 	mh.size = arr.Size()
 	mid := getParent(mh.size - 1)
@@ -28,38 +28,40 @@ func (mh *MinHeap[T]) BuildHeap(arr *array.ArrayList[T]) error {
 		err := mh.siftDown(i)
 
 		if err != nil {
-            return fmt.Errorf("build heap error: failed to siftDown at index %d: %w", i, err)
+			return fmt.Errorf("build heap error: failed to siftDown at index %d: %w", i, err)
 		}
 	}
+
 	return nil
 }
 
-func (mh *MinHeap[T]) Size() int {
+func (mh *MaxHeap[T]) Size() int {
 	return mh.size
 }
 
-func (mh *MinHeap[T]) IsEmpty() bool {
+func (mh *MaxHeap[T]) IsEmpty() bool {
 	return mh.size == 0
 }
 
-func (mh *MinHeap[T]) GetMin() (T, error) {
+func (mh *MaxHeap[T]) GetMax() (T, error) {
 	var zero T
 	if mh.size <= 0 {
-		return zero, errors.New("heap is empty, cannot retrieve the minimum value")
+		return zero, errors.New("heap is empty, cannot retrieve the maximum value")
 	}
-
 	return mh.heap.Get(0)
 }
 
-func (mh *MinHeap[T]) Add(elem T) {
+func (mh *MaxHeap[T]) Add(elem T) {
 	// Since the ArrayList already handles resizing, we do not need to take that into consideration
+
 	size := mh.heap.Size()
 	mh.heap.Add(size, elem)
 	mh.siftUp(mh.size)
-	mh.size++
+	mh.size++	
 }
 
-func (mh *MinHeap[T]) RemoveMin() (T, error) {
+
+func (mh *MaxHeap[T]) RemoveMax() (T, error) {
 	var zero T
 
 	removedVal, err := mh.heap.Get(0)
@@ -68,7 +70,11 @@ func (mh *MinHeap[T]) RemoveMin() (T, error) {
 	}
 
 	size := mh.heap.Size()
-	mh.swap(0, size - 1)
+	swap_err := array.Swap(mh.heap, 0, size - 1)
+
+	if swap_err != nil {
+		return zero, fmt.Errorf("failed to swap root with last element at index %d: %w", size - 1, swap_err)
+	}
 	mh.size--
 
 	if mh.size > 0 {
@@ -78,36 +84,8 @@ func (mh *MinHeap[T]) RemoveMin() (T, error) {
 	return removedVal, nil
 }
 
-func (mh *MinHeap[T]) swap(i, j int) error {
-	iValue, err := mh.heap.Get(i)
-	if err != nil {
-		return fmt.Errorf("failed to retrieve element for index %d\nerror: %w", i, err)
-	}
 
-	jValue, err := mh.heap.Get(j)
-	if err != nil {
-		return fmt.Errorf("failed to retrieve element for index %d\nerror: %w", j, err)
-	}
-
-	err = mh.heap.Set(j, iValue)
-	if err != nil {
-		return fmt.Errorf("failed to swap element: %w", err)
-	}
-
-	err = mh.heap.Set(i, jValue) 
-	if err != nil {
-		// Since the first swap worked as expected, we need to do a rollback.
-		rollbackErr := mh.heap.Set(j, jValue)
-		if rollbackErr != nil {
-			return fmt.Errorf("critical swap error: failed to set element at index %d (original error: %w), AND rollback for index %d failed: %w", j, err, i, rollbackErr)
-		}
-		return fmt.Errorf("failed to swap element: %w", err) 
-	}
-
-	return nil
-}
-
-func (mh *MinHeap[T]) siftUp(pos int) error {
+func (mh *MaxHeap[T]) siftUp(pos int) error {
 	for pos > 0 {
 		parent := getParent(pos)
 
@@ -120,16 +98,17 @@ func (mh *MinHeap[T]) siftUp(pos int) error {
 			return fmt.Errorf("failed to retrieve element for index %d\nerror: %w", parent, err)
 		}
 
-		if newVal >= parentVal {
+		if newVal <= parentVal {
 			return nil
 		}
-		mh.swap(pos, parent)
+		array.Swap(mh.heap,pos, parent)
+
 		pos = parent
 	}
 	return nil
 }
 
-func (mh *MinHeap[T]) siftDown(pos int) error {
+func (mh *MaxHeap[T]) siftDown(pos int) error {
 
 	for !isLeaf(pos, mh.size) {
 		leftChild := getLeftChildIndex(pos)
@@ -150,15 +129,15 @@ func (mh *MinHeap[T]) siftDown(pos int) error {
 			return fmt.Errorf("failed to retrieve element for index %d\nerror: %w", rightChild, err)
 		}
 
-		if rightChild < mh.size && rightVal < leftVal {
+		if rightChild < mh.size && rightVal > leftVal {
 			leftChild = rightChild
 		}
 
-		if leftVal >= currVal {
+		if leftVal <= currVal {
 			return nil
 		}
 
-		mh.swap(pos, leftChild)
+		array.Swap(mh.heap, pos, leftChild)
 		pos = leftChild
 	}
 	return nil
