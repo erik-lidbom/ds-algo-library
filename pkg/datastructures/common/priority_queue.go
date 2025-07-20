@@ -1,15 +1,19 @@
 package common
 
-type MinPriorityQueue interface {
+import (
+	"cmp"
+)
+
+type MinPriorityQueue[T cmp.Ordered] interface {
 	Collection
-	Add(elem any)
-	RemoveMin() any
-	GetMin() any
+	Add(elem T)
+	RemoveMin() (T, error)
+	GetMin() (T, error)
 }
 
-type MaxPriorityQueue interface {
+type MaxPriorityQueue[T cmp.Ordered] interface {
 	Collection
-	Add(elem any)
-	RemoveMax() any
-	GetMax() any
+	Add(elem T)
+	RemoveMax() (T, error)
+	GetMax() (T, error)
 }
