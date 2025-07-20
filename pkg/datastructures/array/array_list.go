@@ -117,3 +117,32 @@ func (al *ArrayList[T]) shrink() {
 		al.arr[i] = oldArray[i]
 	}
 }
+
+func Swap[T cmp.Ordered](arr *ArrayList[T], i, j int) error {
+	iValue, err := arr.Get(i)
+	if err != nil {
+		return fmt.Errorf("failed to retrieve element for index %d\nerror: %w", i, err)
+	}
+
+	jValue, err := arr.Get(j)
+	if err != nil {
+		return fmt.Errorf("failed to retrieve element for index %d\nerror: %w", j, err)
+	}
+
+	err = arr.Set(j, iValue)
+	if err != nil {
+		return fmt.Errorf("failed to swap element: %w", err)
+	}
+
+	err = arr.Set(i, jValue) 
+	if err != nil {
+		// Since the first swap worked as expected, we need to do a rollback.
+		rollbackErr := arr.Set(j, jValue)
+		if rollbackErr != nil {
+			return fmt.Errorf("critical swap error: failed to set element at index %d (original error: %w), AND rollback for index %d failed: %w", j, err, i, rollbackErr)
+		}
+		return fmt.Errorf("failed to swap element: %w", err) 
+	}
+
+	return nil
+}
