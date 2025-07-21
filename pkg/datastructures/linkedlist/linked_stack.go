@@ -34,7 +34,6 @@ func (sl *SinglyLinkedList) Pop() (any, error) {
 		return nil, errors.New("cannot pop an element of an empty list")
 	}
 	popped_node := sl.head
-	popped_node.next = nil
 	sl.head = sl.head.next
 	sl.size--
 
