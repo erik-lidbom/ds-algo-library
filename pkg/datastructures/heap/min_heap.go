@@ -62,13 +62,25 @@ func (mh *MinHeap[T]) Add(elem T) {
 func (mh *MinHeap[T]) RemoveMin() (T, error) {
 	var zero T
 
+	if mh.size == 0 {
+		return zero, errors.New("heap is empty, cannot remove the maximum value")
+	}
+
+
 	removedVal, err := mh.heap.Get(0)
 	if err != nil {
 		return zero, fmt.Errorf("failed to retrieve element for index %d\nerror: %w", 0, err)
 	}
 
-	size := mh.heap.Size()
-	mh.swap(0, size - 1)
+	swap_err := array.Swap(mh.heap, 0, mh.size - 1)
+	if swap_err != nil {
+		return zero, fmt.Errorf("failed to swap root with last element at index %d: %w", mh.size - 1, swap_err)
+	}
+
+	_, removeErr := mh.heap.Remove(mh.size - 1)
+	if removeErr != nil {
+		return zero, fmt.Errorf("failed to remove last element: %w", removeErr)
+	}
 	mh.size--
 
 	if mh.size > 0 {
@@ -145,21 +157,27 @@ func (mh *MinHeap[T]) siftDown(pos int) error {
 			return fmt.Errorf("failed to retrieve element for index %d\nerror: %w", leftChild, err)
 		}
 
-		rightVal, err := mh.heap.Get(rightChild)
-		if err != nil {
-			return fmt.Errorf("failed to retrieve element for index %d\nerror: %w", rightChild, err)
+		minChild := leftChild
+		minVal := leftVal
+
+		if rightChild < mh.size {
+			rightVal, err := mh.heap.Get(rightChild)
+			if err != nil {
+				return fmt.Errorf("failed to retrieve element for index %d\nerror: %w", rightChild, err)
+			}
+
+			if rightVal < leftVal {
+				minChild = rightChild
+				minVal = rightVal
+			}
 		}
 
-		if rightChild < mh.size && rightVal < leftVal {
-			leftChild = rightChild
-		}
-
-		if leftVal >= currVal {
+		if minVal >= currVal {
 			return nil
 		}
 
-		mh.swap(pos, leftChild)
-		pos = leftChild
+		mh.swap(pos, minChild)
+		pos = minChild
 	}
 	return nil
 }
