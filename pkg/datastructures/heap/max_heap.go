@@ -158,3 +158,32 @@ func (mh *MaxHeap[T]) siftDown(pos int) error {
 	}
 	return nil
 }
+
+/*
+This sorting function will invalidate the heap by setting size to -1. 
+All heap operations will fail after calling Sort().
+To reuse the heap again you have to call the BuildHeap function
+*/
+
+func (mh *MaxHeap[T]) Sort() (*array.ArrayList[T], error) {
+	if mh.size == 0 {
+		return mh.heap, nil
+	}
+
+	originalSize := mh.Size()
+
+	for i := originalSize - 1; i > 0; i-- {
+		swap_err := array.Swap(mh.heap, 0, i)
+		if swap_err != nil {
+			return nil, fmt.Errorf("failed to swap root with last element at index %d: %w", mh.size - 1, swap_err)
+		}
+		mh.size--
+		if mh.size > 0 {
+			mh.siftDown(0)
+		}
+	}
+
+	mh.size = -1
+
+	return mh.heap, nil
+}
