@@ -1,18 +1,17 @@
 package array
 
 import (
-	"cmp"
 	"errors"
 	"fmt"
 	"strings"
 )
 
-type ArrayList[T cmp.Ordered] struct {
+type ArrayList[T comparable] struct {
 	arr []T
 	size int
 }
 
-func NewArrayList[T cmp.Ordered]() *ArrayList[T] {
+func NewArrayList[T comparable]() *ArrayList[T] {
 	return &ArrayList[T]{arr: make([]T, 10), size: 0}
 }
 
@@ -118,7 +117,7 @@ func (al *ArrayList[T]) shrink() {
 	}
 }
 
-func Swap[T cmp.Ordered](arr *ArrayList[T], i, j int) error {
+func Swap[T comparable](arr *ArrayList[T], i, j int) error {
 	iValue, err := arr.Get(i)
 	if err != nil {
 		return fmt.Errorf("failed to retrieve element for index %d\nerror: %w", i, err)
