@@ -3,6 +3,7 @@ package sets
 import (
 	"cmp"
 	"ds-algorithms/pkg/datastructures/array"
+	"ds-algorithms/pkg/algorithms/searching"
 	"fmt"
 )
 
@@ -24,7 +25,7 @@ func (ls *ListSet[T]) IsEmpty() bool {
 }
 
 func (ls *ListSet[T]) Add(elem T) error {
-	duplicatedVal, index := ls.findInsertionPoint(elem)
+	duplicatedVal, index := search.FindInsertionPoint(ls.arr, elem)
 
 	if duplicatedVal {
 		return fmt.Errorf("cannot add element to set: value %v already exists\n", duplicatedVal)
@@ -38,9 +39,9 @@ func (ls *ListSet[T]) Add(elem T) error {
 func (ls *ListSet[T]) Remove(elem T) (T, error) {
 	var zero T
 
-	duplicatedVal, index := ls.binary_search(elem)
+	containsElem, index := search.BinarySearchArrayList(ls.arr, elem)
 	
-	if duplicatedVal {
+	if containsElem {
 		ls.arr.Remove(index)
 		ls.size--
 		return elem, nil
@@ -51,50 +52,6 @@ func (ls *ListSet[T]) Remove(elem T) (T, error) {
 
 
 func (ls *ListSet[T]) Contains(elem T) bool {
-	res, _ := ls.binary_search(elem)
+	res, _ := search.BinarySearchArrayList(ls.arr, elem)
 	return res
-}
-
-func (ls *ListSet[T]) binary_search(elem T) (bool, int) {
-	
-	leftIndex := 0
-	rightIndex := ls.size - 1
-
-	for leftIndex <= rightIndex {
-		midIndex := leftIndex + (rightIndex - leftIndex) / 2
-		currVal, _ := ls.arr.Get(midIndex)
-		if elem == currVal {
-		return true, midIndex
-		} else if elem < currVal {
-			rightIndex = midIndex - 1
-		} else { 
-			leftIndex = midIndex + 1
-		}
-	}
-	return false, -1
-}
-
-func (ls *ListSet[T]) findInsertionPoint(elem T) (bool, int) {
-    leftIndex := 0
-    rightIndex := ls.size - 1 
-
-    for leftIndex < rightIndex { 
-        mid := leftIndex + (rightIndex - leftIndex) / 2
-        currVal, _ := ls.arr.Get(mid)
-
-        if currVal < elem {
-            leftIndex = mid + 1
-        } else {
-            rightIndex = mid   
-        }
-    }
-  
-    if leftIndex < ls.size - 1 {
-        lowerBoundVal, _ := ls.arr.Get(leftIndex)
-        if lowerBoundVal == elem {
-            return true, leftIndex
-        }
-    }
-
-    return false, leftIndex
 }
