@@ -32,14 +32,19 @@ func BinarySearch(arr []int, element int) (int, bool){
 // TODO --> ADD TESTS
 
 func BinarySearchArrayList[T cmp.Ordered](arr *array.ArrayList[T], elem T) (bool, int) {
+	size := arr.Size()
+	if size == 0 {
+		return false, -1
+	}
+	
 	leftIndex := 0
-	rightIndex := arr.Size() - 1
+	rightIndex := size - 1
 
 	for leftIndex <= rightIndex {
 		midIndex := leftIndex + (rightIndex - leftIndex) / 2
 		currVal, _ := arr.Get(midIndex)
 		if elem == currVal {
-		return true, midIndex
+			return true, midIndex
 		} else if elem < currVal {
 			rightIndex = midIndex - 1
 		} else { 
@@ -50,28 +55,32 @@ func BinarySearchArrayList[T cmp.Ordered](arr *array.ArrayList[T], elem T) (bool
 }
 
 func FindInsertionPoint[T cmp.Ordered](arr *array.ArrayList[T], elem T) (bool, int) {
+	size := arr.Size()
+	if size == 0 {
+		return false, 0
+	}
+	
+	leftIndex := 0
+	rightIndex := size
 
-	size := arr.Size() - 1
-    leftIndex := 0
-    rightIndex := size
+	for leftIndex < rightIndex { 
+		mid := leftIndex + (rightIndex - leftIndex) / 2
+		currVal, _ := arr.Get(mid)
 
-    for leftIndex < rightIndex { 
-        mid := leftIndex + (rightIndex - leftIndex) / 2
-        currVal, _ := arr.Get(mid)
+		if currVal < elem {
+			leftIndex = mid + 1
+		} else {
+			rightIndex = mid   
+		}
+	}
+	
+	// Check if we found the element
+	if leftIndex < size {
+		lowerBoundVal, _ := arr.Get(leftIndex)
+		if lowerBoundVal == elem {
+			return true, leftIndex
+		}
+	}
 
-        if currVal < elem {
-            leftIndex = mid + 1
-        } else {
-            rightIndex = mid   
-        }
-    }
-  
-    if leftIndex < size {
-        lowerBoundVal, _ := arr.Get(leftIndex)
-        if lowerBoundVal == elem {
-            return true, leftIndex
-        }
-    }
-
-    return false, leftIndex
+	return false, leftIndex
 }

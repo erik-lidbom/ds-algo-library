@@ -54,8 +54,10 @@ func (ls *LinkedSet[T]) Remove(elem T) (T, error) {
 			}
 			currNode.next = nil
 			ls.size--
-			return  elem, nil
+			return elem, nil
 		}
+		prevNode = currNode
+		currNode = currNode.next
 	}
 	return zero, fmt.Errorf("element %v not found in the set", elem)
 }

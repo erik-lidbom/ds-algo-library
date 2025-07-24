@@ -74,6 +74,8 @@ func (lm *LinkedMap[K, V]) Remove(key K) (V, error) {
 			lm.size--
 			return removedVal, nil
 		}
+		prevNode = currNode
+		currNode = currNode.next
 	}
 	return zero, fmt.Errorf("key %v not found in the map", key)
 }
