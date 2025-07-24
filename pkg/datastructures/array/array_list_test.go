@@ -274,4 +274,111 @@ func BenchmarkArrayList_Remove(b *testing.B) {
 	}
 }
 
-// TODO --> Add tests for swapping
+func TestSwap(t *testing.T) {
+	cases := []struct {
+		name string
+		arr []int
+		i, j int
+		expectError bool
+		expectArr []int
+	}{
+		{"swap adjacent", []int{1,2,3,4,5}, 1, 2, false, []int{1,3,2,4,5}},
+		{"swap first and last", []int{1,2,3,4,5}, 0, 4, false, []int{5,2,3,4,1}},
+		{"swap same index", []int{1,2,3,4,5}, 2, 2, false, []int{1,2,3,4,5}},
+		{"swap reverse order", []int{1,2,3,4,5}, 2, 1, false, []int{1,3,2,4,5}},
+		{"error: negative index i", []int{1,2,3,4,5}, -1, 2, true, []int{1,2,3,4,5}},
+		{"error: negative index j", []int{1,2,3,4,5}, 1, -1, true, []int{1,2,3,4,5}},
+		{"error: index i out of bounds", []int{1,2,3,4,5}, 5, 2, true, []int{1,2,3,4,5}},
+		{"error: index j out of bounds", []int{1,2,3,4,5}, 1, 5, true, []int{1,2,3,4,5}},
+		{"empty array", []int{}, 0, 1, true, []int{}},
+		{"single element", []int{1}, 0, 0, false, []int{1}},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			arr := NewArrayList[int]()
+			for i, val := range c.arr {
+				arr.Add(i, val)
+			}
+			
+			err := Swap(arr, c.i, c.j)
+			
+			if c.expectError {
+				if err == nil {
+					t.Errorf("Expected error but got nil")
+				}
+			} else {
+				if err != nil {
+					t.Errorf("Expected no error but got: %v", err)
+				}
+				
+				// Verify the array contents
+				for i := 0; i < arr.Size(); i++ {
+					val, _ := arr.Get(i)
+					if val != c.expectArr[i] {
+						t.Errorf("At index %d: got %d, want %d", i, val, c.expectArr[i])
+					}
+				}
+			}
+		})
+	}
+}
+
+func TestSwap_EdgeCases(t *testing.T) {
+	t.Run("swap with large array", func(t *testing.T) {
+		arr := NewArrayList[int]()
+		for i := 0; i < 100; i++ {
+			arr.Add(i, i)
+		}
+		
+		err := Swap(arr, 0, 99)
+		if err != nil {
+			t.Errorf("Expected no error but got: %v", err)
+		}
+		
+		first, _ := arr.Get(0)
+		last, _ := arr.Get(99)
+		if first != 99 || last != 0 {
+			t.Errorf("Swap failed: first=%d, last=%d", first, last)
+		}
+	})
+	
+	t.Run("swap multiple times", func(t *testing.T) {
+		arr := NewArrayList[int]()
+		arr.Add(0, 1)
+		arr.Add(1, 2)
+		arr.Add(2, 3)
+		
+		// Swap 0 and 1
+		err := Swap(arr, 0, 1)
+		if err != nil {
+			t.Errorf("First swap failed: %v", err)
+		}
+		
+		// Swap 1 and 2
+		err = Swap(arr, 1, 2)
+		if err != nil {
+			t.Errorf("Second swap failed: %v", err)
+		}
+		
+		// Verify final state: should be [2, 3, 1]
+		expected := []int{2, 3, 1}
+		for i := 0; i < arr.Size(); i++ {
+			val, _ := arr.Get(i)
+			if val != expected[i] {
+				t.Errorf("At index %d: got %d, want %d", i, val, expected[i])
+			}
+		}
+	})
+}
+
+func BenchmarkSwap(b *testing.B) {
+	arr := NewArrayList[int]()
+	for i := 0; i < 1000; i++ {
+		arr.Add(i, i)
+	}
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		Swap(arr, 0, 999)
+	}
+}
