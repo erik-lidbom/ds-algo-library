@@ -84,3 +84,36 @@ func FindInsertionPoint[T cmp.Ordered](arr *array.ArrayList[T], elem T) (bool, i
 
 	return false, leftIndex
 }
+
+// TODO --> WRITE TEST
+
+func FindUpperBound[T cmp.Ordered](arr *array.ArrayList[T], elem T) (bool, int) {
+		size := arr.Size()
+	if size == 0 {
+		return false, 0
+	}
+	
+	leftIndex := 0
+	rightIndex := size
+
+	for leftIndex < rightIndex { 
+		mid := leftIndex + (rightIndex - leftIndex) / 2
+		currVal, _ := arr.Get(mid)
+
+		if currVal <= elem {
+			leftIndex = mid + 1
+		} else {
+			rightIndex = mid   
+		}
+	}
+	
+	// Check if we found the element
+	if leftIndex < size {
+		lowerBoundVal, _ := arr.Get(leftIndex)
+		if lowerBoundVal == elem {
+			return true, leftIndex
+		}
+	}
+
+	return false, leftIndex
+}
