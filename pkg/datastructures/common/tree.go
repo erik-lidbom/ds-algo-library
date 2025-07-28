@@ -1,12 +1,17 @@
 package common
 
-type Tree interface {
+import (
+	"cmp"
+	"ds-algorithms/pkg/datastructures/array"
+)
+
+type Tree[T cmp.Ordered] interface {
 	Collection
-	Insert(item any) error
-	Search(item any) (any, bool)
-	Delete(item any) error
-	TraversePreOrder() ([]any, error)
-	TraversePostOrder() ([]any, error)
-	TraverseInOrder() ([]any, error)
+	Insert(item T) error
+	Search(item T) (T, bool)
+	Delete(item T) error
+	TraversePreOrder() (array.ArrayList[T], error)
+	TraversePostOrder() (array.ArrayList[T], error)
+	TraverseInOrder() (array.ArrayList[T], error)
 	Clear() error
 }
