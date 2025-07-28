@@ -39,7 +39,7 @@ func (ls *ListSet[T]) Add(elem T) error {
 func (ls *ListSet[T]) Remove(elem T) (T, error) {
 	var zero T
 
-	containsElem, index := search.BinarySearchArrayList(ls.arr, elem)
+	index, containsElem := search.BinarySearch(ls.arr, elem)
 	
 	if containsElem {
 		ls.arr.Remove(index)
@@ -52,7 +52,7 @@ func (ls *ListSet[T]) Remove(elem T) (T, error) {
 
 
 func (ls *ListSet[T]) Contains(elem T) bool {
-	res, _ := search.BinarySearchArrayList(ls.arr, elem)
+	_, res := search.BinarySearch(ls.arr, elem)
 	return res
 }
 

@@ -46,7 +46,7 @@ func (slm *SortedListMap[K, V]) Put(key K, value V) {
 func (slm *SortedListMap[K, V]) Get(key K) (V, error) {
 	var zero V
 
-	containsKey, index := search.BinarySearchArrayList(slm.keys, key)
+	index, containsKey := search.BinarySearch(slm.keys, key)
 	if containsKey {
 		val, _ := slm.values.Get(index)
 		return val, nil
@@ -58,7 +58,7 @@ func (slm *SortedListMap[K, V]) Get(key K) (V, error) {
 func (slm *SortedListMap[K, V]) Remove(key K) (V, error) {
 	var zero V
 
-	containsKey, index := search.BinarySearchArrayList(slm.keys, key)
+	index, containsKey := search.BinarySearch(slm.keys, key)
 
 	if containsKey {
 		slm.keys.Remove(index)
@@ -71,7 +71,7 @@ func (slm *SortedListMap[K, V]) Remove(key K) (V, error) {
 }
 
 func (slm *SortedListMap[K, V]) ContainsKey(key K) bool {
-	res, _ := search.BinarySearchArrayList(slm.keys, key)
+	_, res := search.BinarySearch(slm.keys, key)
 	return res
 }
 
