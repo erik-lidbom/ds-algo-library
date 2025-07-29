@@ -2,9 +2,10 @@ package searchable
 
 import (
 	"cmp"
-	"ds-algorithms/pkg/datastructures/common"
 	"errors"
 	"fmt"
+
+	"ds-algorithms/pkg/datastructures/common"
 )
 
 // SearchableSlice works as a wrapper that can be used on normal Go arrays and slices.
@@ -32,7 +33,7 @@ func (ss SearchableSlice[T]) Set(index int, elem T) error {
 		return ErrIndexOutOfBounds
 	}
 	ss[index] = elem
-	return nil 
+	return nil
 }
 
 func Swap[T cmp.Ordered](arr common.Searchable[T], i, j int) error {
@@ -51,14 +52,14 @@ func Swap[T cmp.Ordered](arr common.Searchable[T], i, j int) error {
 		return fmt.Errorf("failed to swap element: %w", err)
 	}
 
-	err = arr.Set(i, jValue) 
+	err = arr.Set(i, jValue)
 	if err != nil {
 		// Since the first swap worked as expected, we need to do a rollback.
 		rollbackErr := arr.Set(j, jValue)
 		if rollbackErr != nil {
 			return fmt.Errorf("critical swap error: failed to set element at index %d (original error: %w), AND rollback for index %d failed: %w", j, err, i, rollbackErr)
 		}
-		return fmt.Errorf("failed to swap element: %w", err) 
+		return fmt.Errorf("failed to swap element: %w", err)
 	}
 
 	return nil

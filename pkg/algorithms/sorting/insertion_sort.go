@@ -2,17 +2,18 @@ package sorting
 
 import (
 	"cmp"
+
 	"ds-algorithms/pkg/datastructures/common"
 )
 
-func InsertionSort[T cmp.Ordered] (
-	arr common.Searchable[T]) {
-
+func InsertionSort[T cmp.Ordered](
+	arr common.Searchable[T],
+) {
 	size := arr.Size()
 
 	for i := 1; i < size; i++ {
 		j := i
-		
+
 		valX, _ := arr.Get(j)
 
 		for j > 0 {
@@ -24,5 +25,5 @@ func InsertionSort[T cmp.Ordered] (
 			j--
 		}
 		arr.Set(j, valX)
-	} 
+	}
 }

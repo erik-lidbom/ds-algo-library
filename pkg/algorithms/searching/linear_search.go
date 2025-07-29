@@ -1,10 +1,10 @@
 package search
 
-import 
-	(	
+import (
 	"cmp"
+
 	"ds-algorithms/pkg/datastructures/common"
-	)
+)
 
 /*
 Algorithm to search for elements in an unordered list
@@ -26,14 +26,13 @@ Complexity: O(n)
 // int - index of the elem, -1 if it do not exist in the slice
 // bool - if the algorithm found the elem or not
 
-func LinearSearch[T cmp.Ordered] (data common.Searchable[T], element T) (int,bool) {
-	
-	for i := range data.Size(){
+func LinearSearch[T cmp.Ordered](data common.Searchable[T], element T) (int, bool) {
+	for i := range data.Size() {
 		value, err := data.Get(i)
 		if err != nil {
 			return -1, false
 		}
-		if(value == element){
+		if value == element {
 			return i, true
 		}
 	}

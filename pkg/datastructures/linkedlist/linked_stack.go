@@ -21,7 +21,7 @@ func (sl *SinglyLinkedList) IsEmpty() bool {
 
 func (sl *SinglyLinkedList) Push(x any) {
 	new_node := &Node{
-		val: x,
+		val:  x,
 		next: sl.head,
 	}
 
@@ -41,7 +41,6 @@ func (sl *SinglyLinkedList) Pop() (any, error) {
 }
 
 func (sl *SinglyLinkedList) Peek() (any, error) {
-
 	if sl.IsEmpty() {
 		return nil, errors.New("cannot peek an empty list")
 	}

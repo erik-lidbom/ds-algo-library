@@ -5,18 +5,18 @@ import (
 )
 
 type ArrayQueue struct {
-  arr [] any
-  front int
-  rear int
-  size int
+	arr   []any
+	front int
+	rear  int
+	size  int
 }
 
 func NewArrayQueue() *ArrayQueue {
 	return &ArrayQueue{
-		arr: make([]any, 10),
+		arr:   make([]any, 10),
 		front: 0,
-		rear: 0,
-		size: 0,
+		rear:  0,
+		size:  0,
 	}
 }
 
@@ -40,7 +40,6 @@ func (aq *ArrayQueue) Enqueue(item any) error {
 }
 
 func (aq *ArrayQueue) Dequeue() (any, error) {
-
 	if aq.IsEmpty() {
 		return nil, errors.New("cannot dequeue an empty queue")
 	}
@@ -50,28 +49,26 @@ func (aq *ArrayQueue) Dequeue() (any, error) {
 	aq.front = (aq.front + 1) % len(aq.arr)
 	aq.size--
 
-	if aq.size * 3 <= len(aq.arr) {
+	if aq.size*3 <= len(aq.arr) {
 		aq.shrinkArray()
 	}
-	return removedItem , nil
+	return removedItem, nil
 }
 
 func (aq *ArrayQueue) Peek() (any, error) {
-
 	if aq.IsEmpty() {
 		return nil, errors.New("cannot peek an empty queue")
 	}
-	
+
 	return aq.arr[aq.front], nil
 }
 
 func (aq *ArrayQueue) resizeArray() {
-
 	oldArray := aq.arr
-	aq.arr = make([]any, aq.size * 2)
+	aq.arr = make([]any, aq.size*2)
 
 	for i := 0; i < aq.size; i++ {
-		newPos := (aq.front + i) % len(aq.arr) 
+		newPos := (aq.front + i) % len(aq.arr)
 		aq.arr[i] = oldArray[newPos]
 	}
 	aq.front = 0
@@ -79,14 +76,12 @@ func (aq *ArrayQueue) resizeArray() {
 }
 
 func (aq *ArrayQueue) shrinkArray() {
-
 	oldArray := aq.arr
-	aq.arr = make([]any, len(aq.arr) / 2)
-
+	aq.arr = make([]any, len(aq.arr)/2)
 
 	for i := 0; i < aq.size; i++ {
 		newPos := (aq.front + i) % len(oldArray)
-		aq.arr[i] = oldArray[newPos] 
+		aq.arr[i] = oldArray[newPos]
 	}
 
 	aq.front = 0

@@ -2,9 +2,10 @@ package trees
 
 import (
 	"cmp"
+	"fmt"
+
 	"ds-algorithms/pkg/datastructures/array"
 	"ds-algorithms/pkg/datastructures/trees/nodes"
-	"fmt"
 )
 
 type BinarySearchTreeMap[K cmp.Ordered, V comparable] struct {
@@ -43,17 +44,17 @@ func (bstm *BinarySearchTreeMap[K, V]) Get(key K) (V, error) {
 }
 
 func (bstm *BinarySearchTreeMap[K, V]) Remove(key K) (V, error) {
-	 var zeroV V 
+	var zeroV V
 
-    newRoot, removedValue, wasRemoved := bstm.removeHelper(bstm.root, key)
-    bstm.root = newRoot 
+	newRoot, removedValue, wasRemoved := bstm.removeHelper(bstm.root, key)
+	bstm.root = newRoot
 
-    if wasRemoved {
-        bstm.size-- 
-        return removedValue, nil 
-    }
+	if wasRemoved {
+		bstm.size--
+		return removedValue, nil
+	}
 
-    return zeroV, fmt.Errorf("item %v not found in tree", key)
+	return zeroV, fmt.Errorf("item %v not found in tree", key)
 }
 
 func (bstm *BinarySearchTreeMap[K, V]) ContainsKey(key K) bool {
@@ -81,9 +82,9 @@ func (bstm *BinarySearchTreeMap[K, V]) Search(key K) (V, bool) {
 }
 
 func (bstm *BinarySearchTreeMap[K, V]) Delete(key K) error {
-	initialSize := bstm.size 
+	initialSize := bstm.size
 	bstm.root, _, _ = bstm.removeHelper(bstm.root, key)
-	
+
 	if bstm.size < initialSize {
 		return nil
 	}
@@ -94,7 +95,7 @@ func (bstm *BinarySearchTreeMap[K, V]) Delete(key K) error {
 func (bstm *BinarySearchTreeMap[K, V]) TraversePreOrder(node *nodes.BinaryMapNode[K, V]) (*array.ArrayList[K], error) {
 	var zero *array.ArrayList[K]
 	arr := array.NewArrayList[K]()
-	
+
 	err := nodes.PreOrderTraversal(node, arr)
 	if err != nil {
 		return zero, err
@@ -106,7 +107,7 @@ func (bstm *BinarySearchTreeMap[K, V]) TraversePreOrder(node *nodes.BinaryMapNod
 func (bstm *BinarySearchTreeMap[K, V]) TraversePostOrder(node *nodes.BinaryMapNode[K, V]) (*array.ArrayList[K], error) {
 	var zero *array.ArrayList[K]
 	arr := array.NewArrayList[K]()
-	
+
 	err := nodes.PostOrderTraversal(node, arr)
 	if err != nil {
 		return zero, err
@@ -116,10 +117,9 @@ func (bstm *BinarySearchTreeMap[K, V]) TraversePostOrder(node *nodes.BinaryMapNo
 }
 
 func (bstm *BinarySearchTreeMap[K, V]) TraverseInOrder(node *nodes.BinaryMapNode[K, V]) (*array.ArrayList[K], error) {
-
 	var zero *array.ArrayList[K]
 	arr := array.NewArrayList[K]()
-	
+
 	err := nodes.InOrderTraversal(node, arr)
 	if err != nil {
 		return zero, err
@@ -157,51 +157,51 @@ func (bstm *BinarySearchTreeMap[K, V]) putHelper(node *nodes.BinaryMapNode[K, V]
 	if node == nil {
 		bstm.size++
 		return &nodes.BinaryMapNode[K, V]{
-			Key: key,
+			Key:   key,
 			Value: value,
-			Left: nil,
+			Left:  nil,
 			Right: nil,
 		}
 	} else if key < node.Key {
 		bstm.putHelper(node.Left, key, value)
 	} else if key > node.Key {
 		bstm.putHelper(node.Right, key, value)
-	} 
+	}
 	node.Value = value
-	return node	
+	return node
 }
 
 func (bstm *BinarySearchTreeMap[K, V]) removeHelper(node *nodes.BinaryMapNode[K, V], key K) (*nodes.BinaryMapNode[K, V], V, bool) {
-    var zeroV V
+	var zeroV V
 
-    if node == nil {
-        return nil, zeroV, false
-    }
+	if node == nil {
+		return nil, zeroV, false
+	}
 
-    var removedValue V 
-    var removed bool 
+	var removedValue V
+	var removed bool
 
-    if key < node.Key {
-        node.Left, removedValue, removed = bstm.removeHelper(node.Left, key)
-        return node, removedValue, removed
-    } else if key > node.Key {
-        node.Right, removedValue, removed = bstm.removeHelper(node.Right, key)
-        return node, removedValue, removed
-    } else { 
-        if node.Left == nil {
-            return node.Right, node.Value, true
-        } else if node.Right == nil {
-            return node.Left, node.Value, true
-        } else { 
-            pred := bstm.largestNode(node.Left)
-            originalNodeValue := node.Value
+	if key < node.Key {
+		node.Left, removedValue, removed = bstm.removeHelper(node.Left, key)
+		return node, removedValue, removed
+	} else if key > node.Key {
+		node.Right, removedValue, removed = bstm.removeHelper(node.Right, key)
+		return node, removedValue, removed
+	} else {
+		if node.Left == nil {
+			return node.Right, node.Value, true
+		} else if node.Right == nil {
+			return node.Left, node.Value, true
+		} else {
+			pred := bstm.largestNode(node.Left)
+			originalNodeValue := node.Value
 
-            node.Key = pred.Key
-            node.Value = pred.Value
+			node.Key = pred.Key
+			node.Value = pred.Value
 
-            node.Left, _, _ = bstm.removeHelper(node.Left, pred.Key)
+			node.Left, _, _ = bstm.removeHelper(node.Left, pred.Key)
 
-            return node, originalNodeValue, true
-        }
-    }
+			return node, originalNodeValue, true
+		}
+	}
 }

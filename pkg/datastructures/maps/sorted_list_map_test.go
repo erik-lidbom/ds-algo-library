@@ -28,12 +28,12 @@ func TestSortedListMap_Size(t *testing.T) {
 	if slm.Size() != 0 {
 		t.Errorf("Expected size 0, got %d", slm.Size())
 	}
-	
+
 	slm.Put(1, "one")
 	if slm.Size() != 1 {
 		t.Errorf("Expected size 1, got %d", slm.Size())
 	}
-	
+
 	slm.Put(2, "two")
 	if slm.Size() != 2 {
 		t.Errorf("Expected size 2, got %d", slm.Size())
@@ -45,7 +45,7 @@ func TestSortedListMap_IsEmpty(t *testing.T) {
 	if !slm.IsEmpty() {
 		t.Error("Expected empty map")
 	}
-	
+
 	slm.Put(1, "one")
 	if slm.IsEmpty() {
 		t.Error("Expected non-empty map")
@@ -54,10 +54,10 @@ func TestSortedListMap_IsEmpty(t *testing.T) {
 
 func TestSortedListMap_Put(t *testing.T) {
 	cases := []struct {
-		name string
-		entries [][2]any
-		expectSize int
-		expectKeys []int
+		name         string
+		entries      [][2]any
+		expectSize   int
+		expectKeys   []int
 		expectValues []string
 	}{
 		{"put single entry", [][2]any{{1, "one"}}, 1, []int{1}, []string{"one"}},
@@ -71,17 +71,17 @@ func TestSortedListMap_Put(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			slm := NewSortedListMap[int, string]()
-			
+
 			for _, entry := range c.entries {
 				key := entry[0].(int)
 				value := entry[1].(string)
 				slm.Put(key, value)
 			}
-			
+
 			if slm.Size() != c.expectSize {
 				t.Errorf("Expected size %d, got %d", c.expectSize, slm.Size())
 			}
-			
+
 			// Verify keys are sorted
 			for i := 0; i < slm.Size(); i++ {
 				key, _ := slm.keys.Get(i)
@@ -89,7 +89,7 @@ func TestSortedListMap_Put(t *testing.T) {
 					t.Errorf("At index %d: got key %d, want %d", i, key, c.expectKeys[i])
 				}
 			}
-			
+
 			// Verify values correspond to sorted keys
 			for i := 0; i < slm.Size(); i++ {
 				value, _ := slm.values.Get(i)
@@ -103,19 +103,19 @@ func TestSortedListMap_Put(t *testing.T) {
 
 func TestSortedListMap_Put_Update(t *testing.T) {
 	slm := NewSortedListMap[int, string]()
-	
+
 	// Put initial value
 	slm.Put(1, "one")
 	if slm.Size() != 1 {
 		t.Errorf("Expected size 1, got %d", slm.Size())
 	}
-	
+
 	// Update existing key
 	slm.Put(1, "updated")
 	if slm.Size() != 1 {
 		t.Errorf("Expected size 1 after update, got %d", slm.Size())
 	}
-	
+
 	// Verify updated value
 	value, err := slm.Get(1)
 	if err != nil {
@@ -128,9 +128,9 @@ func TestSortedListMap_Put_Update(t *testing.T) {
 
 func TestSortedListMap_Get(t *testing.T) {
 	cases := []struct {
-		name string
-		entries [][2]any
-		searchKey int
+		name        string
+		entries     [][2]any
+		searchKey   int
 		expectValue string
 		expectError bool
 	}{
@@ -146,15 +146,15 @@ func TestSortedListMap_Get(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			slm := NewSortedListMap[int, string]()
-			
+
 			for _, entry := range c.entries {
 				key := entry[0].(int)
 				value := entry[1].(string)
 				slm.Put(key, value)
 			}
-			
+
 			value, err := slm.Get(c.searchKey)
-			
+
 			if c.expectError {
 				if err == nil {
 					t.Error("Expected error but got nil")
@@ -173,14 +173,14 @@ func TestSortedListMap_Get(t *testing.T) {
 
 func TestSortedListMap_Remove(t *testing.T) {
 	cases := []struct {
-		name string
-		entries [][2]any
-		removeKey int
-		expectSize int
-		expectError bool
+		name          string
+		entries       [][2]any
+		removeKey     int
+		expectSize    int
+		expectError   bool
 		expectRemoved string
-		expectKeys []int
-		expectValues []string
+		expectKeys    []int
+		expectValues  []string
 	}{
 		{"remove existing key", [][2]any{{1, "one"}, {2, "two"}}, 1, 1, false, "one", []int{2}, []string{"two"}},
 		{"remove non-existent key", [][2]any{{1, "one"}, {2, "two"}}, 3, 2, true, "", []int{1, 2}, []string{"one", "two"}},
@@ -194,15 +194,15 @@ func TestSortedListMap_Remove(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			slm := NewSortedListMap[int, string]()
-			
+
 			for _, entry := range c.entries {
 				key := entry[0].(int)
 				value := entry[1].(string)
 				slm.Put(key, value)
 			}
-			
+
 			removed, err := slm.Remove(c.removeKey)
-			
+
 			if c.expectError {
 				if err == nil {
 					t.Error("Expected error but got nil")
@@ -215,11 +215,11 @@ func TestSortedListMap_Remove(t *testing.T) {
 					t.Errorf("Expected removed value '%s', got '%s'", c.expectRemoved, removed)
 				}
 			}
-			
+
 			if slm.Size() != c.expectSize {
 				t.Errorf("Expected size %d, got %d", c.expectSize, slm.Size())
 			}
-			
+
 			// Verify remaining keys are still sorted
 			for i := 0; i < slm.Size(); i++ {
 				key, _ := slm.keys.Get(i)
@@ -227,7 +227,7 @@ func TestSortedListMap_Remove(t *testing.T) {
 					t.Errorf("At index %d: got key %d, want %d", i, key, c.expectKeys[i])
 				}
 			}
-			
+
 			// Verify remaining values correspond to sorted keys
 			for i := 0; i < slm.Size(); i++ {
 				value, _ := slm.values.Get(i)
@@ -241,9 +241,9 @@ func TestSortedListMap_Remove(t *testing.T) {
 
 func TestSortedListMap_ContainsKey(t *testing.T) {
 	cases := []struct {
-		name string
-		entries [][2]any
-		searchKey int
+		name        string
+		entries     [][2]any
+		searchKey   int
 		expectFound bool
 	}{
 		{"contains existing key", [][2]any{{1, "one"}, {2, "two"}}, 1, true},
@@ -260,13 +260,13 @@ func TestSortedListMap_ContainsKey(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			slm := NewSortedListMap[int, string]()
-			
+
 			for _, entry := range c.entries {
 				key := entry[0].(int)
 				value := entry[1].(string)
 				slm.Put(key, value)
 			}
-			
+
 			found := slm.ContainsKey(c.searchKey)
 			if found != c.expectFound {
 				t.Errorf("Expected found=%v, got %v", c.expectFound, found)
@@ -278,16 +278,16 @@ func TestSortedListMap_ContainsKey(t *testing.T) {
 func TestSortedListMap_EdgeCases(t *testing.T) {
 	t.Run("put and remove multiple times", func(t *testing.T) {
 		slm := NewSortedListMap[int, string]()
-		
+
 		// Put entries
 		slm.Put(3, "three")
 		slm.Put(1, "one")
 		slm.Put(2, "two")
-		
+
 		if slm.Size() != 3 {
 			t.Errorf("Expected size 3, got %d", slm.Size())
 		}
-		
+
 		// Remove middle entry
 		removed, err := slm.Remove(2)
 		if err != nil {
@@ -296,11 +296,11 @@ func TestSortedListMap_EdgeCases(t *testing.T) {
 		if removed != "two" {
 			t.Errorf("Expected removed 'two', got '%s'", removed)
 		}
-		
+
 		if slm.Size() != 2 {
 			t.Errorf("Expected size 2, got %d", slm.Size())
 		}
-		
+
 		// Verify remaining entries
 		if !slm.ContainsKey(1) || !slm.ContainsKey(3) {
 			t.Error("Expected keys 1 and 3 to remain")
@@ -309,48 +309,55 @@ func TestSortedListMap_EdgeCases(t *testing.T) {
 			t.Error("Expected key 2 to be removed")
 		}
 	})
-	
+
 	t.Run("put same key after remove", func(t *testing.T) {
 		slm := NewSortedListMap[int, string]()
 		slm.Put(1, "one")
 		slm.Remove(1)
 		slm.Put(1, "new") // Should work after removal
-		
+
 		if slm.Size() != 1 {
 			t.Errorf("Expected size 1, got %d", slm.Size())
 		}
 		if !slm.ContainsKey(1) {
 			t.Error("Expected key 1 to be present")
 		}
-		
+
 		value, _ := slm.Get(1)
 		if value != "new" {
 			t.Errorf("Expected value 'new', got '%s'", value)
 		}
 	})
-	
+
 	t.Run("maintain sorted order", func(t *testing.T) {
 		slm := NewSortedListMap[int, string]()
 		entries := [][2]any{
-			{5, "five"}, {2, "two"}, {8, "eight"}, {1, "one"}, 
-			{9, "nine"}, {3, "three"}, {7, "seven"}, {4, "four"}, {6, "six"},
+			{5, "five"},
+			{2, "two"},
+			{8, "eight"},
+			{1, "one"},
+			{9, "nine"},
+			{3, "three"},
+			{7, "seven"},
+			{4, "four"},
+			{6, "six"},
 		}
-		
+
 		for _, entry := range entries {
 			key := entry[0].(int)
 			value := entry[1].(string)
 			slm.Put(key, value)
 		}
-		
+
 		expectedKeys := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 		expectedValues := []string{"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
-		
+
 		for i := 0; i < slm.Size(); i++ {
 			key, _ := slm.keys.Get(i)
 			if key != expectedKeys[i] {
 				t.Errorf("At index %d: got key %d, want %d", i, key, expectedKeys[i])
 			}
-			
+
 			value, _ := slm.values.Get(i)
 			if value != expectedValues[i] {
 				t.Errorf("At index %d: got value '%s', want '%s'", i, value, expectedValues[i])
@@ -389,4 +396,4 @@ func BenchmarkSortedListMap_Remove(b *testing.B) {
 			slm.Remove(i)
 		}
 	}
-} 
+}

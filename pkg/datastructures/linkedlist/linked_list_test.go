@@ -127,7 +127,7 @@ func BenchmarkLinkedList_Set(b *testing.B) {
 	}
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		ll.Set(n % 1000, n)
+		ll.Set(n%1000, n)
 	}
 }
 
@@ -141,4 +141,4 @@ func BenchmarkLinkedList_Remove(b *testing.B) {
 			ll.Remove(0)
 		}
 	}
-} 
+}

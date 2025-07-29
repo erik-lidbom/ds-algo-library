@@ -3,7 +3,7 @@ package linkedlist
 import "errors"
 
 type Node struct {
-	val any
+	val  any
 	next *Node
 }
 
@@ -20,9 +20,9 @@ func (ll *LinkedList) IsEmpty() bool {
 	return ll.size == 0
 }
 
-func (ll *LinkedList) Add(index int, elem any) (error) {
-	if index < 0 || index > ll.size { 
-		return errors.New("index out of bounds") 
+func (ll *LinkedList) Add(index int, elem any) error {
+	if index < 0 || index > ll.size {
+		return errors.New("index out of bounds")
 	}
 
 	if index == 0 {
@@ -34,18 +34,19 @@ func (ll *LinkedList) Add(index int, elem any) (error) {
 
 	prevNode := ll.head
 
-	for i := 0; i < index - 1; i++ {
+	for i := 0; i < index-1; i++ {
 		prevNode = prevNode.next
 	}
 	newNode := &Node{val: elem, next: prevNode.next}
 	prevNode.next = newNode
 	ll.size++
-	
+
 	return nil
 }
+
 func (ll *LinkedList) Get(index int) (any, error) {
 	if index < 0 || index >= ll.size {
-		return nil, errors.New("index out of bounds") 
+		return nil, errors.New("index out of bounds")
 	}
 
 	if index == 0 {
@@ -58,10 +59,10 @@ func (ll *LinkedList) Get(index int) (any, error) {
 	}
 	return currentNode.val, nil
 }
-func (ll *LinkedList) Set(index int, elem any) (error) {
 
-	if index < 0 || index >= ll.size { 
-		return errors.New("index out of bounds") 
+func (ll *LinkedList) Set(index int, elem any) error {
+	if index < 0 || index >= ll.size {
+		return errors.New("index out of bounds")
 	}
 
 	if index == 0 {
@@ -77,9 +78,10 @@ func (ll *LinkedList) Set(index int, elem any) (error) {
 	currentNode.val = elem
 	return nil
 }
+
 func (ll *LinkedList) Remove(index int) (any, error) {
-	if index < 0 || index >= ll.size { 
-		return nil, errors.New("index out of bounds") 
+	if index < 0 || index >= ll.size {
+		return nil, errors.New("index out of bounds")
 	}
 
 	if index == 0 {
@@ -92,7 +94,7 @@ func (ll *LinkedList) Remove(index int) (any, error) {
 
 	prevNode := ll.head
 
-	for i := 0; i < index - 1; i++ {
+	for i := 0; i < index-1; i++ {
 		prevNode = prevNode.next
 	}
 

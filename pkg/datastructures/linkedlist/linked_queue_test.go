@@ -98,4 +98,4 @@ func BenchmarkLinkedQueue_Peek(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		q.Peek()
 	}
-} 
+}

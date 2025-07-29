@@ -6,9 +6,9 @@ import (
 )
 
 type MapNode[K cmp.Ordered, V any] struct {
-	key K
+	key   K
 	value V
-	next *MapNode[K, V]
+	next  *MapNode[K, V]
 }
 
 type LinkedMap[K cmp.Ordered, V any] struct {
@@ -28,13 +28,13 @@ func (lm *LinkedMap[K, V]) IsEmpty() bool {
 	return lm.size == 0
 }
 
-func (lm *LinkedMap[K, V]) Put(key K, value V)  {
+func (lm *LinkedMap[K, V]) Put(key K, value V) {
 	currNode := lm.head
 
 	for currNode != nil {
 		if key == currNode.key {
 			currNode.value = value
-			return 
+			return
 		}
 		currNode = currNode.next
 	}

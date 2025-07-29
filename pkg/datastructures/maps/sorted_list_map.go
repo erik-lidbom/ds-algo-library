@@ -2,22 +2,23 @@ package maps
 
 import (
 	"cmp"
+	"fmt"
+
 	search "ds-algorithms/pkg/algorithms/searching"
 	"ds-algorithms/pkg/datastructures/array"
-	"fmt"
 )
 
 type SortedListMap[K cmp.Ordered, V comparable] struct {
-	keys *array.ArrayList[K]
+	keys   *array.ArrayList[K]
 	values *array.ArrayList[V]
-	size int
+	size   int
 }
 
 func NewSortedListMap[K cmp.Ordered, V comparable]() *SortedListMap[K, V] {
 	return &SortedListMap[K, V]{
-		keys: array.NewArrayList[K](),
+		keys:   array.NewArrayList[K](),
 		values: array.NewArrayList[V](),
-		size: 0,
+		size:   0,
 	}
 }
 
@@ -30,17 +31,16 @@ func (slm *SortedListMap[K, V]) IsEmpty() bool {
 }
 
 func (slm *SortedListMap[K, V]) Put(key K, value V) {
-
 	duplicatedVal, index := search.FindInsertionPoint(slm.keys, key)
-	
+
 	if duplicatedVal {
 		slm.values.Set(index, value)
 		return
 	}
 
-	slm.keys.Add(index, key)	
+	slm.keys.Add(index, key)
 	slm.values.Add(index, value)
-	slm.size++	
+	slm.size++
 }
 
 func (slm *SortedListMap[K, V]) Get(key K) (V, error) {
@@ -66,7 +66,7 @@ func (slm *SortedListMap[K, V]) Remove(key K) (V, error) {
 		slm.size--
 		return removedVal, nil
 	}
-	
+
 	return zero, fmt.Errorf("key %v not found in the map", key)
 }
 
@@ -129,8 +129,8 @@ func (slm *SortedListMap[K, V]) FloorKey(key K) (K, error) {
 
 	floorKey, err := slm.keys.Get(index - 1)
 	if err != nil {
-        return zero, fmt.Errorf("internal error: failed to retrieve floorKey at index %d-1: %w", index, err)
-    }
+		return zero, fmt.Errorf("internal error: failed to retrieve floorKey at index %d-1: %w", index, err)
+	}
 	return floorKey, nil
 }
 
@@ -149,8 +149,8 @@ func (slm *SortedListMap[K, V]) CeilingKey(key K) (K, error) {
 
 	ceilingKey, err := slm.keys.Get(index)
 	if err != nil {
-        return zero, fmt.Errorf("internal error: failed to retrieve ceilingKey at index %d: %w", index, err)
-    }
+		return zero, fmt.Errorf("internal error: failed to retrieve ceilingKey at index %d: %w", index, err)
+	}
 
 	return ceilingKey, nil
 }

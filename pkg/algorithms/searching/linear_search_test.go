@@ -1,23 +1,24 @@
 package search
 
 import (
-	"ds-algorithms/pkg/datastructures/searchable"
 	"testing"
+
+	"ds-algorithms/pkg/datastructures/searchable"
 )
 
 func TestLinearSearch(t *testing.T) {
 	cases := []struct {
-		name string
-		arr []int
-		elem int
-		expectIdx int
+		name        string
+		arr         []int
+		elem        int
+		expectIdx   int
 		expectFound bool
 	}{
 		{"empty", []int{}, 1, 0, false},
 		{"single found", []int{5}, 5, 0, true},
 		{"single not found", []int{5}, 1, 0, false},
-		{"found", []int{1,2,3,4,5}, 3, 2, true},
-		{"not found", []int{1,2,3,4,5}, 9, 0, false},
+		{"found", []int{1, 2, 3, 4, 5}, 3, 2, true},
+		{"not found", []int{1, 2, 3, 4, 5}, 9, 0, false},
 	}
 	for _, c := range cases {
 		currArr := searchable.SearchableSlice[int](c.arr)
@@ -38,4 +39,4 @@ func BenchmarkLinearSearch(b *testing.B) {
 		currArr := searchable.SearchableSlice[int](arr)
 		LinearSearch(currArr, 999)
 	}
-} 
+}

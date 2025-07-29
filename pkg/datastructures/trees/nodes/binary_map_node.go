@@ -3,9 +3,9 @@ package nodes
 import "cmp"
 
 type BinaryMapNode[K cmp.Ordered, V comparable] struct {
-	Key K
+	Key   K
 	Value V
-	Left *BinaryMapNode[K, V]
+	Left  *BinaryMapNode[K, V]
 	Right *BinaryMapNode[K, V]
 }
 
@@ -22,6 +22,7 @@ func (bmn *BinaryMapNode[K, V]) GetRight() TraversableNode[K] {
 	}
 	return bmn.Right
 }
+
 func (bmn *BinaryMapNode[K, V]) GetValue() K {
 	if bmn == nil {
 		var zero K

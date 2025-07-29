@@ -2,11 +2,12 @@ package heap
 
 import (
 	"cmp"
+	"errors"
+	"fmt"
+
 	"ds-algorithms/pkg/datastructures/array"
 	"ds-algorithms/pkg/datastructures/common"
 	"ds-algorithms/pkg/datastructures/searchable"
-	"errors"
-	"fmt"
 )
 
 type MaxHeap[T cmp.Ordered] struct {
@@ -28,7 +29,6 @@ func (mh *MaxHeap[T]) BuildHeap(data common.List[T]) error {
 
 	for i := mid; i >= 0; i-- {
 		err := mh.siftDown(i)
-
 		if err != nil {
 			return fmt.Errorf("build heap error: failed to siftDown at index %d: %w", i, err)
 		}
@@ -59,9 +59,8 @@ func (mh *MaxHeap[T]) Add(elem T) {
 	size := mh.heap.Size()
 	mh.heap.Add(size, elem)
 	mh.siftUp(mh.size)
-	mh.size++	
+	mh.size++
 }
-
 
 func (mh *MaxHeap[T]) RemoveMax() (T, error) {
 	var zero T
@@ -75,13 +74,10 @@ func (mh *MaxHeap[T]) RemoveMax() (T, error) {
 		return zero, fmt.Errorf("failed to retrieve element for index %d\nerror: %w", 0, err)
 	}
 
-	
-	
-	swap_err := searchable.Swap(mh.heap, 0, mh.size - 1)
+	swap_err := searchable.Swap(mh.heap, 0, mh.size-1)
 	if swap_err != nil {
-		return zero, fmt.Errorf("failed to swap root with last element at index %d: %w", mh.size - 1, swap_err)
+		return zero, fmt.Errorf("failed to swap root with last element at index %d: %w", mh.size-1, swap_err)
 	}
-
 
 	_, removeErr := mh.heap.Remove(mh.size - 1)
 	if removeErr != nil {
@@ -95,7 +91,6 @@ func (mh *MaxHeap[T]) RemoveMax() (T, error) {
 
 	return removedVal, nil
 }
-
 
 func (mh *MaxHeap[T]) siftUp(pos int) error {
 	for pos > 0 {
@@ -113,7 +108,7 @@ func (mh *MaxHeap[T]) siftUp(pos int) error {
 		if newVal <= parentVal {
 			return nil
 		}
-		searchable.Swap(mh.heap,pos, parent)
+		searchable.Swap(mh.heap, pos, parent)
 
 		pos = parent
 	}
@@ -121,7 +116,6 @@ func (mh *MaxHeap[T]) siftUp(pos int) error {
 }
 
 func (mh *MaxHeap[T]) siftDown(pos int) error {
-
 	for !isLeaf(pos, mh.size) {
 		leftChild := getLeftChildIndex(pos)
 		rightChild := getRightChildIndex(pos)
@@ -162,7 +156,7 @@ func (mh *MaxHeap[T]) siftDown(pos int) error {
 }
 
 /*
-This sorting function will invalidate the heap by setting size to -1. 
+This sorting function will invalidate the heap by setting size to -1.
 All heap operations will fail after calling Sort().
 To reuse the heap again you have to call the BuildHeap function
 */
@@ -177,7 +171,7 @@ func (mh *MaxHeap[T]) Sort() (common.List[T], error) {
 	for i := originalSize - 1; i > 0; i-- {
 		swap_err := searchable.Swap(mh.heap, 0, i)
 		if swap_err != nil {
-			return nil, fmt.Errorf("failed to swap root with last element at index %d: %w", mh.size - 1, swap_err)
+			return nil, fmt.Errorf("failed to swap root with last element at index %d: %w", mh.size-1, swap_err)
 		}
 		mh.size--
 		if mh.size > 0 {

@@ -2,6 +2,7 @@ package search
 
 import (
 	"cmp"
+
 	"ds-algorithms/pkg/datastructures/common"
 )
 
@@ -20,23 +21,22 @@ import (
 // int - index of the elem, -1 if it do not exist in the slice
 // bool - if the algorithm found the elem or not
 
-func BinarySearch[T cmp.Ordered](data common.Searchable[T], elem T) (int, bool){
-
+func BinarySearch[T cmp.Ordered](data common.Searchable[T], elem T) (int, bool) {
 	leftIndex := 0
 	rightIndex := data.Size() - 1
 
 	for leftIndex <= rightIndex {
-		middleIndex := leftIndex + (rightIndex - leftIndex) / 2 // Calculates the midpoint of the current search field
+		middleIndex := leftIndex + (rightIndex-leftIndex)/2 // Calculates the midpoint of the current search field
 		middleValue, err := data.Get(middleIndex)
 		if err != nil {
 			return -1, false
 		}
 
-		if(elem == middleValue){
+		if elem == middleValue {
 			return middleIndex, true // elem found at mid_index[i]
-		} else if(elem < middleValue){ // elem is less than mid_index, search at left half of slice
-			rightIndex = middleIndex - 1 
-		} else if(elem > middleValue){ // elem is greater than mid_index, search at right half of the slice
+		} else if elem < middleValue { // elem is less than mid_index, search at left half of slice
+			rightIndex = middleIndex - 1
+		} else if elem > middleValue { // elem is greater than mid_index, search at right half of the slice
 			leftIndex = middleIndex + 1
 		}
 	}
@@ -48,16 +48,16 @@ func BinarySearch[T cmp.Ordered](data common.Searchable[T], elem T) (int, bool){
 //
 // Algorithm: Binary Search (Lower Bound / Insertion Point)
 // The algorithm determines the index where the elem should be inserted.
-// It returns the index of the first element that is not less than elem. 
-// If elem is already present, this will be the index of its first occurrence. 
+// It returns the index of the first element that is not less than elem.
+// If elem is already present, this will be the index of its first occurrence.
 // If elem is greater than all elements, the returned index will be the size of the data property.
 //
 // Time Complexity: O(log N) - The search space is halved in each iteration.
 // Space Complexity: O(1) - since we do everything in-place
 //
 // Parameters:
-// 	data - the ordered list that the algorithm performs the search on. 
-// 	The list must satisfy the Searchable interface, so to use a normal slice you must cast the slice to be a searchable slice. 
+// 	data - the ordered list that the algorithm performs the search on.
+// 	The list must satisfy the Searchable interface, so to use a normal slice you must cast the slice to be a searchable slice.
 //  The ArrayList struct already supports this interface.
 // 	elem - the element to find the insertion point for
 //
@@ -70,22 +70,22 @@ func FindInsertionPoint[T cmp.Ordered](data common.Searchable[T], elem T) (bool,
 	if size == 0 {
 		return false, 0 // if data is empty, the insertion point will be at index 0
 	}
-	
+
 	leftIndex := 0
 	rightIndex := size
 
 	// Perform binary search to find the insertion point
-	for leftIndex < rightIndex { 
-		mid := leftIndex + (rightIndex - leftIndex) / 2
+	for leftIndex < rightIndex {
+		mid := leftIndex + (rightIndex-leftIndex)/2
 		currVal, _ := data.Get(mid)
 
 		if currVal < elem {
 			leftIndex = mid + 1
 		} else {
-			rightIndex = mid   
+			rightIndex = mid
 		}
 	}
-	
+
 	// Checks if the element at the current insertion point is equal to the value we want to insert
 	if leftIndex < size {
 		lowerBoundVal, _ := data.Get(leftIndex)
@@ -96,7 +96,6 @@ func FindInsertionPoint[T cmp.Ordered](data common.Searchable[T], elem T) (bool,
 
 	return false, leftIndex // Element were not found in current list
 }
-
 
 // FindUpperBound performs a binary search on a Searchable compatible data structure to find the upper bound
 // for an element in a sorted data structure.
@@ -111,8 +110,8 @@ func FindInsertionPoint[T cmp.Ordered](data common.Searchable[T], elem T) (bool,
 // Space Complexity: O(1) - since we do everything in-place
 //
 // Parameters:
-// 	data - the ordered list that the algorithm performs the search on. 
-// 	The list must satisfy the Searchable interface, so to use a normal slice you must cast the slice to be a searchable slice. 
+// 	data - the ordered list that the algorithm performs the search on.
+// 	The list must satisfy the Searchable interface, so to use a normal slice you must cast the slice to be a searchable slice.
 //  The ArrayList struct already supports this interface.
 // 	elem - the element to find the upper bound
 //
@@ -123,26 +122,26 @@ func FindInsertionPoint[T cmp.Ordered](data common.Searchable[T], elem T) (bool,
 // TODO --> WRITE TEST
 
 func FindUpperBound[T cmp.Ordered](data common.Searchable[T], elem T) (bool, int) {
-		size := data.Size()
+	size := data.Size()
 	if size == 0 {
 		return false, 0 // if data is empty, the upper bound will be at index 0
 	}
-	
+
 	leftIndex := 0
 	rightIndex := size
-	
+
 	// Perform binary search to find the upperbound
-	for leftIndex < rightIndex { 
-		mid := leftIndex + (rightIndex - leftIndex) / 2
+	for leftIndex < rightIndex {
+		mid := leftIndex + (rightIndex-leftIndex)/2
 		currVal, _ := data.Get(mid)
 
 		if currVal <= elem {
 			leftIndex = mid + 1
 		} else {
-			rightIndex = mid   
+			rightIndex = mid
 		}
 	}
-	
+
 	// Check if element is present in the list
 	if leftIndex < size {
 		lowerBoundVal, _ := data.Get(leftIndex)

@@ -1,6 +1,8 @@
 package common
 
-import ("cmp")
+import (
+	"cmp"
+)
 
 // Searchable represents a data structure that allows elements to be retrieved by index and provides its total size
 // Size() - returns the amount of elements in the slice, ArrayList or other Searchable compatible types

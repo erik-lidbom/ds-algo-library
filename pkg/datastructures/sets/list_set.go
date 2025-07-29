@@ -2,13 +2,14 @@ package sets
 
 import (
 	"cmp"
-	"ds-algorithms/pkg/datastructures/array"
-	"ds-algorithms/pkg/algorithms/searching"
 	"fmt"
+
+	search "ds-algorithms/pkg/algorithms/searching"
+	"ds-algorithms/pkg/datastructures/array"
 )
 
 type ListSet[T cmp.Ordered] struct {
-	arr *array.ArrayList[T]
+	arr  *array.ArrayList[T]
 	size int
 }
 
@@ -40,7 +41,7 @@ func (ls *ListSet[T]) Remove(elem T) (T, error) {
 	var zero T
 
 	index, containsElem := search.BinarySearch(ls.arr, elem)
-	
+
 	if containsElem {
 		ls.arr.Remove(index)
 		ls.size--
@@ -49,7 +50,6 @@ func (ls *ListSet[T]) Remove(elem T) (T, error) {
 
 	return zero, fmt.Errorf("element %v not found in the set", elem)
 }
-
 
 func (ls *ListSet[T]) Contains(elem T) bool {
 	_, res := search.BinarySearch(ls.arr, elem)
@@ -94,10 +94,10 @@ func (ls *ListSet[T]) Floor(x T) (T, error) {
 
 	if found {
 		floor, err := ls.arr.Get(index)
-        if err != nil {
-            return zero, fmt.Errorf("internal error: failed to retrieve floor element at index %d: %w", index, err)
-        }
-        return floor, nil
+		if err != nil {
+			return zero, fmt.Errorf("internal error: failed to retrieve floor element at index %d: %w", index, err)
+		}
+		return floor, nil
 	}
 
 	if index == 0 {
@@ -105,9 +105,9 @@ func (ls *ListSet[T]) Floor(x T) (T, error) {
 	}
 
 	floor, err := ls.arr.Get(index - 1)
-    if err != nil {
-        return zero, fmt.Errorf("internal error: failed to retrieve floor element at index %d-1: %w", index, err)
-    }
+	if err != nil {
+		return zero, fmt.Errorf("internal error: failed to retrieve floor element at index %d-1: %w", index, err)
+	}
 	return floor, nil
 }
 
@@ -124,12 +124,13 @@ func (ls *ListSet[T]) Ceiling(x T) (T, error) {
 	}
 
 	ceiling, err := ls.arr.Get(index)
-	 if err != nil {
-        return zero, fmt.Errorf("internal error: failed to retrieve ceiling element at index %d: %w", index, err)
-    }
+	if err != nil {
+		return zero, fmt.Errorf("internal error: failed to retrieve ceiling element at index %d: %w", index, err)
+	}
 
 	return ceiling, nil
 }
+
 func (ls *ListSet[T]) Lower(x T) (T, error) {
 	var zero T
 	if ls.IsEmpty() {
@@ -170,8 +171,7 @@ func (ls *ListSet[T]) Higher(x T) (T, error) {
 	return higher, nil
 }
 
-func (ls *ListSet[T]) Between(x, y T) *array.ArrayList[T]{
-
+func (ls *ListSet[T]) Between(x, y T) *array.ArrayList[T] {
 	arr := array.NewArrayList[T]()
 
 	if ls.IsEmpty() {
@@ -182,7 +182,7 @@ func (ls *ListSet[T]) Between(x, y T) *array.ArrayList[T]{
 	_, endIndex := search.FindUpperBound(ls.arr, y)
 
 	if startIndex >= ls.Size() || startIndex >= endIndex {
-		return  arr
+		return arr
 	}
 
 	for i := startIndex; i < endIndex; i++ {

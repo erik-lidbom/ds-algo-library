@@ -4,7 +4,7 @@ import "cmp"
 
 type BinaryNode[T cmp.Ordered] struct {
 	Value T
-	Left *BinaryNode[T]
+	Left  *BinaryNode[T]
 	Right *BinaryNode[T]
 }
 

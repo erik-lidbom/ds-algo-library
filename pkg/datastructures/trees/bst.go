@@ -2,13 +2,14 @@ package trees
 
 import (
 	"cmp"
+	"fmt"
+
 	"ds-algorithms/pkg/datastructures/array"
 	"ds-algorithms/pkg/datastructures/trees/nodes"
-	"fmt"
 )
 
 // TODO --> CREATE BST THAT ALLOWS DUPLICATE KEYS
- 
+
 type BinarySearchTree[T cmp.Ordered] struct {
 	root *nodes.BinaryNode[T]
 	size int
@@ -27,7 +28,6 @@ func (bst *BinarySearchTree[T]) IsEmpty() bool {
 }
 
 func (bst *BinarySearchTree[T]) Insert(item T) error {
-
 	var parent *nodes.BinaryNode[T]
 	node := bst.root
 
@@ -72,11 +72,10 @@ func (bst *BinarySearchTree[T]) Search(item T) (T, bool) {
 	return zero, false
 }
 
-
 func (bst *BinarySearchTree[T]) Delete(item T) error {
-	initialSize := bst.size 
+	initialSize := bst.size
 	bst.root = bst.removeHelper(bst.root, item)
-	
+
 	if bst.size < initialSize {
 		return nil
 	}
@@ -86,7 +85,7 @@ func (bst *BinarySearchTree[T]) Delete(item T) error {
 func (bst *BinarySearchTree[T]) TraversePreOrder(node *nodes.BinaryNode[T]) (*array.ArrayList[T], error) {
 	var zero *array.ArrayList[T]
 	arr := array.NewArrayList[T]()
-	
+
 	err := nodes.PreOrderTraversal(node, arr)
 	if err != nil {
 		return zero, err
@@ -98,7 +97,7 @@ func (bst *BinarySearchTree[T]) TraversePreOrder(node *nodes.BinaryNode[T]) (*ar
 func (bst *BinarySearchTree[T]) TraversePostOrder(node *nodes.BinaryNode[T]) (*array.ArrayList[T], error) {
 	var zero *array.ArrayList[T]
 	arr := array.NewArrayList[T]()
-	
+
 	err := nodes.PostOrderTraversal(node, arr)
 	if err != nil {
 		return zero, err
@@ -110,7 +109,7 @@ func (bst *BinarySearchTree[T]) TraversePostOrder(node *nodes.BinaryNode[T]) (*a
 func (bst *BinarySearchTree[T]) TraverseInOrder(node *nodes.BinaryNode[T]) (*array.ArrayList[T], error) {
 	var zero *array.ArrayList[T]
 	arr := array.NewArrayList[T]()
-	
+
 	err := nodes.InOrderTraversal(node, arr)
 	if err != nil {
 		return zero, err
@@ -139,7 +138,6 @@ func (bst *BinarySearchTree[T]) largestNode(node *nodes.BinaryNode[T]) *nodes.Bi
 }
 
 func (bst *BinarySearchTree[T]) removeHelper(node *nodes.BinaryNode[T], val T) *nodes.BinaryNode[T] {
-
 	if node == nil {
 		return nil
 	}

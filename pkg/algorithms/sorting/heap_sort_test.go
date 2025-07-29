@@ -1,8 +1,9 @@
 package sorting
 
 import (
-	"ds-algorithms/pkg/datastructures/array"
 	"testing"
+
+	"ds-algorithms/pkg/datastructures/array"
 )
 
 func newArrayListFromInts(ints ...int) *array.ArrayList[int] {
@@ -35,9 +36,9 @@ func TestNaiveHeapsort(t *testing.T) {
 	}{
 		{"empty", newArrayListFromInts(), newArrayListFromInts()},
 		{"single", newArrayListFromInts(1), newArrayListFromInts(1)},
-		{"sorted", newArrayListFromInts(1,2,3), newArrayListFromInts(1,2,3)},
-		{"reverse", newArrayListFromInts(3,2,1), newArrayListFromInts(1,2,3)},
-		{"random", newArrayListFromInts(5,1,4,2,8), newArrayListFromInts(1,2,4,5,8)},
+		{"sorted", newArrayListFromInts(1, 2, 3), newArrayListFromInts(1, 2, 3)},
+		{"reverse", newArrayListFromInts(3, 2, 1), newArrayListFromInts(1, 2, 3)},
+		{"random", newArrayListFromInts(5, 1, 4, 2, 8), newArrayListFromInts(1, 2, 4, 5, 8)},
 	}
 	for _, c := range cases {
 		al := newArrayListFromInts() // create a fresh list
@@ -63,9 +64,9 @@ func TestHeapSort(t *testing.T) {
 	}{
 		{"empty", newArrayListFromInts(), newArrayListFromInts()},
 		{"single", newArrayListFromInts(1), newArrayListFromInts(1)},
-		{"sorted", newArrayListFromInts(1,2,3), newArrayListFromInts(1,2,3)},
-		{"reverse", newArrayListFromInts(3,2,1), newArrayListFromInts(1,2,3)},
-		{"random", newArrayListFromInts(5,1,4,2,8), newArrayListFromInts(1,2,4,5,8)},
+		{"sorted", newArrayListFromInts(1, 2, 3), newArrayListFromInts(1, 2, 3)},
+		{"reverse", newArrayListFromInts(3, 2, 1), newArrayListFromInts(1, 2, 3)},
+		{"random", newArrayListFromInts(5, 1, 4, 2, 8), newArrayListFromInts(1, 2, 4, 5, 8)},
 	}
 	for _, c := range cases {
 		al := newArrayListFromInts() // create a fresh list
@@ -91,4 +92,4 @@ func BenchmarkHeapSort(b *testing.B) {
 		}
 		HeapSort(al)
 	}
-} 
+}

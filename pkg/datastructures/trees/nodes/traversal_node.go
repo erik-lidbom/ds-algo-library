@@ -2,8 +2,9 @@ package nodes
 
 import (
 	"cmp"
-	"ds-algorithms/pkg/datastructures/array"
 	"fmt"
+
+	"ds-algorithms/pkg/datastructures/array"
 )
 
 type TraversableNode[E cmp.Ordered] interface {
@@ -19,9 +20,9 @@ func PreOrderTraversal[E cmp.Ordered](node TraversableNode[E], resultArr *array.
 	}
 
 	err := resultArr.Add(resultArr.Size(), node.GetValue())
-	 if err != nil {
-        return fmt.Errorf("error adding element %v to result list: %w", node.GetValue(), err)
-    }
+	if err != nil {
+		return fmt.Errorf("error adding element %v to result list: %w", node.GetValue(), err)
+	}
 
 	err = PreOrderTraversal(node.GetLeft(), resultArr)
 	if err != nil {
@@ -51,9 +52,9 @@ func PostOrderTraversal[E cmp.Ordered](node TraversableNode[E], resultArr *array
 	}
 
 	err = resultArr.Add(resultArr.Size(), node.GetValue())
-	 if err != nil {
-        return fmt.Errorf("error adding element %v to result list: %w", node.GetValue(), err)
-    }
+	if err != nil {
+		return fmt.Errorf("error adding element %v to result list: %w", node.GetValue(), err)
+	}
 
 	return nil
 }

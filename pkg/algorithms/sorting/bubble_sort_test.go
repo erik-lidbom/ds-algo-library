@@ -1,22 +1,23 @@
 package sorting
 
 import (
-	"ds-algorithms/pkg/datastructures/searchable"
 	"reflect"
 	"testing"
+
+	"ds-algorithms/pkg/datastructures/searchable"
 )
 
 func TestBubbleSort(t *testing.T) {
 	cases := []struct {
-		name string
-		input []int
+		name   string
+		input  []int
 		expect []int
 	}{
 		{"empty", []int{}, []int{}},
 		{"single", []int{1}, []int{1}},
-		{"sorted", []int{1,2,3}, []int{1,2,3}},
-		{"reverse", []int{3,2,1}, []int{1,2,3}},
-		{"random", []int{5,1,4,2,8}, []int{1,2,4,5,8}},
+		{"sorted", []int{1, 2, 3}, []int{1, 2, 3}},
+		{"reverse", []int{3, 2, 1}, []int{1, 2, 3}},
+		{"random", []int{5, 1, 4, 2, 8}, []int{1, 2, 4, 5, 8}},
 	}
 	for _, c := range cases {
 		arr := make([]int, len(c.input))
@@ -38,4 +39,4 @@ func BenchmarkBubbleSort(b *testing.B) {
 		currArr := searchable.SearchableSlice[int](arr)
 		BubbleSort(currArr)
 	}
-} 
+}

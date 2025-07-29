@@ -1,22 +1,23 @@
 package sorting
 
 import (
-	"ds-algorithms/pkg/datastructures/searchable"
 	"reflect"
 	"testing"
+
+	"ds-algorithms/pkg/datastructures/searchable"
 )
 
 func TestSelectionSort(t *testing.T) {
 	cases := []struct {
-		name string
-		input []int
+		name   string
+		input  []int
 		expect []int
 	}{
 		{"empty", []int{}, []int{}},
 		{"single", []int{1}, []int{1}},
-		{"sorted", []int{1,2,3}, []int{1,2,3}},
-		{"reverse", []int{3,2,1}, []int{1,2,3}},
-		{"random", []int{5,1,4,2,8}, []int{1,2,4,5,8}},
+		{"sorted", []int{1, 2, 3}, []int{1, 2, 3}},
+		{"reverse", []int{3, 2, 1}, []int{1, 2, 3}},
+		{"random", []int{5, 1, 4, 2, 8}, []int{1, 2, 4, 5, 8}},
 	}
 	for _, c := range cases {
 		arr := make([]int, len(c.input))
@@ -35,7 +36,7 @@ func BenchmarkSelectionSort(b *testing.B) {
 		for i := range arr {
 			arr[i] = 1000 - i
 		}
-		currArray := searchable.SearchableSlice[int](arr)		
+		currArray := searchable.SearchableSlice[int](arr)
 		SelectionSort(currArray)
 	}
-} 
+}

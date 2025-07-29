@@ -1,8 +1,9 @@
 package heap
 
 import (
-	"ds-algorithms/pkg/datastructures/array"
 	"testing"
+
+	"ds-algorithms/pkg/datastructures/array"
 )
 
 func TestNewMaxHeap(t *testing.T) {
@@ -25,7 +26,7 @@ func TestMaxHeap_Add(t *testing.T) {
 	if mh.IsEmpty() {
 		t.Errorf("Expected heap to not be empty after adding element")
 	}
-	
+
 	max, err := mh.GetMax()
 	if err != nil {
 		t.Errorf("Did not expect an error when getting max, but got %v", err)
@@ -38,11 +39,11 @@ func TestMaxHeap_Add(t *testing.T) {
 	mh.Add(5)
 	mh.Add(20)
 	mh.Add(12)
-	
+
 	if mh.Size() != 5 {
 		t.Errorf("Expected size to be 5, but got %d", mh.Size())
 	}
-	
+
 	max, err = mh.GetMax()
 	if err != nil {
 		t.Errorf("Did not expect an error when getting max, but got %v", err)
@@ -63,7 +64,7 @@ func TestMaxHeap_GetMax(t *testing.T) {
 	mh.Add(20)
 	mh.Add(30)
 	mh.Add(10)
-	
+
 	max, err := mh.GetMax()
 	if err != nil {
 		t.Errorf("Did not expect an error when getting max, but got %v", err)
@@ -71,7 +72,7 @@ func TestMaxHeap_GetMax(t *testing.T) {
 	if max != 30 {
 		t.Errorf("Expected max to be 30, but got %v", max)
 	}
-	
+
 	if mh.Size() != 3 {
 		t.Errorf("Expected size to remain 3 after GetMax, but got %d", mh.Size())
 	}
@@ -93,12 +94,8 @@ func TestMaxHeap_RemoveMax(t *testing.T) {
 	expectedOrder := []int{25, 20, 15, 10, 8, 7, 5}
 
 	for i, expected := range expectedOrder {
-	
+
 		removed, err := mh.RemoveMax()
-
-
-
-
 		if err != nil {
 			t.Errorf("Did not expect an error when removing max, but got %v", err)
 		}
@@ -146,16 +143,16 @@ func TestMaxHeap_BuildHeap(t *testing.T) {
 
 func TestMaxHeap_HeapPropertyMaintained(t *testing.T) {
 	mh := NewMaxHeap[int]()
-	
+
 	elements := []int{50, 30, 70, 20, 40, 60, 80, 10, 25, 35, 45}
 	for _, elem := range elements {
 		mh.Add(elem)
-		
+
 		max, err := mh.GetMax()
 		if err != nil {
 			t.Errorf("Did not expect an error when getting max, but got %v", err)
 		}
-		
+
 		for i := 1; i < mh.Size(); i++ {
 			val, err := mh.heap.Get(i)
 			if err != nil {
@@ -170,12 +167,12 @@ func TestMaxHeap_HeapPropertyMaintained(t *testing.T) {
 
 func TestMaxHeap_WithStrings(t *testing.T) {
 	mh := NewMaxHeap[string]()
-	
+
 	words := []string{"apple", "zebra", "banana", "cherry"}
 	for _, word := range words {
 		mh.Add(word)
 	}
-	
+
 	max, err := mh.GetMax()
 	if err != nil {
 		t.Errorf("Did not expect an error when getting max, but got %v", err)
@@ -183,7 +180,7 @@ func TestMaxHeap_WithStrings(t *testing.T) {
 	if max != "zebra" {
 		t.Errorf("Expected max to be 'zebra', but got %v", max)
 	}
-	
+
 	expected := []string{"zebra", "cherry", "banana", "apple"}
 	for _, exp := range expected {
 		removed, err := mh.RemoveMax()
@@ -198,12 +195,12 @@ func TestMaxHeap_WithStrings(t *testing.T) {
 
 func TestMaxHeap_SingleElement(t *testing.T) {
 	mh := NewMaxHeap[int]()
-	
+
 	mh.Add(42)
 	if mh.Size() != 1 {
 		t.Errorf("Expected size to be 1, but got %d", mh.Size())
 	}
-	
+
 	max, err := mh.GetMax()
 	if err != nil {
 		t.Errorf("Did not expect an error when getting max, but got %v", err)
@@ -211,7 +208,7 @@ func TestMaxHeap_SingleElement(t *testing.T) {
 	if max != 42 {
 		t.Errorf("Expected max to be 42, but got %v", max)
 	}
-	
+
 	removed, err := mh.RemoveMax()
 	if err != nil {
 		t.Errorf("Did not expect an error when removing max, but got %v", err)
@@ -219,7 +216,7 @@ func TestMaxHeap_SingleElement(t *testing.T) {
 	if removed != 42 {
 		t.Errorf("Expected to remove 42, but got %v", removed)
 	}
-	
+
 	if !mh.IsEmpty() {
 		t.Errorf("Expected heap to be empty after removing single element")
 	}
@@ -227,16 +224,16 @@ func TestMaxHeap_SingleElement(t *testing.T) {
 
 func TestMaxHeap_DuplicateElements(t *testing.T) {
 	mh := NewMaxHeap[int]()
-	
+
 	elements := []int{10, 20, 10, 30, 20, 30}
 	for _, elem := range elements {
 		mh.Add(elem)
 	}
-	
+
 	if mh.Size() != len(elements) {
 		t.Errorf("Expected size to be %d, but got %d", len(elements), mh.Size())
 	}
-	
+
 	expectedOrder := []int{30, 30, 20, 20, 10, 10}
 	for _, expected := range expectedOrder {
 		removed, err := mh.RemoveMax()
@@ -251,15 +248,15 @@ func TestMaxHeap_DuplicateElements(t *testing.T) {
 
 func TestMaxHeap_LargeDataset(t *testing.T) {
 	mh := NewMaxHeap[int]()
-	
+
 	for i := 1; i <= 100; i++ {
 		mh.Add(i)
 	}
-	
+
 	if mh.Size() != 100 {
 		t.Errorf("Expected size to be 100, but got %d", mh.Size())
 	}
-	
+
 	max, err := mh.GetMax()
 	if err != nil {
 		t.Errorf("Did not expect an error when getting max, but got %v", err)
@@ -267,7 +264,7 @@ func TestMaxHeap_LargeDataset(t *testing.T) {
 	if max != 100 {
 		t.Errorf("Expected max to be 100, but got %v", max)
 	}
-	
+
 	for i := 100; i > 90; i-- {
 		removed, err := mh.RemoveMax()
 		if err != nil {
@@ -307,10 +304,10 @@ func BenchmarkMaxHeap_BuildHeap(b *testing.B) {
 	for i := 0; i < 1000; i++ {
 		al.Add(i, i)
 	}
-	
+
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		mh := NewMaxHeap[int]()
 		mh.BuildHeap(al)
 	}
-} 
+}

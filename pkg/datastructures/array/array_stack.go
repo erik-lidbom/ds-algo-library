@@ -4,9 +4,8 @@ import (
 	"errors"
 )
 
-
 type ArrayStack struct {
-	arr []any
+	arr  []any
 	size int
 }
 
@@ -33,35 +32,33 @@ func (as *ArrayStack) Push(x any) {
 }
 
 func (as *ArrayStack) Pop() (any, error) {
-
 	if as.IsEmpty() {
 		return nil, errors.New("cannot pop from an empty stack")
 	}
 
 	arraySize := as.size
-	removedVal := as.arr[arraySize - 1]
-	as.arr[arraySize - 1] = nil
+	removedVal := as.arr[arraySize-1]
+	as.arr[arraySize-1] = nil
 	as.size--
 
-	if as.size * 3 <= len(as.arr) {
+	if as.size*3 <= len(as.arr) {
 		as.shrinkArray()
 	}
 	return removedVal, nil
 }
 
 func (as *ArrayStack) Peek() (any, error) {
-
 	if as.IsEmpty() {
 		return nil, errors.New("cannot peek an empty stack")
 	}
 	arraySize := as.size
-	peekValue := as.arr[arraySize - 1]
+	peekValue := as.arr[arraySize-1]
 	return peekValue, nil
 }
 
 func (as *ArrayStack) resizeArray() {
 	oldArray := as.arr
-	as.arr = make([]any, as.size * 2)
+	as.arr = make([]any, as.size*2)
 
 	for i := 0; i < as.size; i++ {
 		as.arr[i] = oldArray[i]
@@ -70,7 +67,7 @@ func (as *ArrayStack) resizeArray() {
 
 func (as *ArrayStack) shrinkArray() {
 	oldArray := as.arr
-	as.arr = make([]any, len(as.arr) / 2)
+	as.arr = make([]any, len(as.arr)/2)
 
 	for i := 0; i < as.size; i++ {
 		as.arr[i] = oldArray[i]

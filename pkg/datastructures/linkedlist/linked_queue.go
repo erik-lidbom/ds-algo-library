@@ -4,8 +4,8 @@ import "errors"
 
 type LinkedQueue struct {
 	front *Node
-	rear *Node
-	size int
+	rear  *Node
+	size  int
 }
 
 func NewLinkedQueue() *LinkedQueue {
@@ -27,12 +27,12 @@ func (lq *LinkedQueue) Enqueue(x any) {
 	} else {
 		lq.rear.next = newNode
 	}
-	
+
 	lq.rear = newNode
 	lq.size++
 }
 
-func (lq *LinkedQueue) Dequeue() (any, error){
+func (lq *LinkedQueue) Dequeue() (any, error) {
 	if lq.IsEmpty() {
 		return nil, errors.New("cannot dequeue an empty queue")
 	}
@@ -45,12 +45,11 @@ func (lq *LinkedQueue) Dequeue() (any, error){
 
 	if lq.IsEmpty() {
 		lq.rear = nil
-	} 
+	}
 	return dequeuedNode, nil
 }
 
 func (lq *LinkedQueue) Peek() (any, error) {
-
 	if lq.IsEmpty() {
 		return nil, errors.New("cannot peek an empty queue")
 	}

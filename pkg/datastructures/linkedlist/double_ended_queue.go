@@ -3,7 +3,7 @@ package linkedlist
 import "errors"
 
 type DoubleNode struct {
-	val any
+	val  any
 	prev *DoubleNode
 	next *DoubleNode
 }
@@ -35,13 +35,13 @@ func (dd *DoubleDeque) AddFirst(elem any) {
 	dd.size++
 }
 
-func (dd *DoubleDeque) AddLast(elem any){
+func (dd *DoubleDeque) AddLast(elem any) {
 	if dd.size == 0 {
 		newNode := &DoubleNode{val: elem, prev: nil, next: nil}
 		dd.head = newNode
 		dd.tail = newNode
 	} else {
-		newNode := &DoubleNode{val:elem, prev: dd.tail, next: nil}
+		newNode := &DoubleNode{val: elem, prev: dd.tail, next: nil}
 		dd.tail.next = newNode
 		dd.tail = newNode
 	}
@@ -68,8 +68,8 @@ func (dd *DoubleDeque) RemoveFirst() (any, error) {
 	dd.size--
 	return removedElem.val, nil
 }
+
 func (dd *DoubleDeque) RemoveLast() (any, error) {
-	
 	if dd.IsEmpty() {
 		return nil, errors.New("cannot remove element from empty list")
 	}
@@ -81,20 +81,22 @@ func (dd *DoubleDeque) RemoveLast() (any, error) {
 		dd.tail.next = nil
 	}
 
-	if dd.size == 1 { 
-        dd.head = nil
-    }
+	if dd.size == 1 {
+		dd.head = nil
+	}
 
 	removedElem.prev = nil
 	dd.size--
 	return removedElem.val, nil
 }
+
 func (dd *DoubleDeque) PeekFirst() (any, error) {
 	if dd.IsEmpty() {
 		return nil, errors.New("cannot peek empty list")
 	}
 	return dd.head.val, nil
 }
+
 func (dd *DoubleDeque) PeekLast() (any, error) {
 	if dd.IsEmpty() {
 		return nil, errors.New("cannot peek empty list")

@@ -2,10 +2,9 @@ package sorting
 
 import (
 	"cmp"
+
 	"ds-algorithms/pkg/datastructures/common"
 )
-
-
 
 func QuickSort[T cmp.Ordered](arr common.Searchable[T], left int, right int) {
 	if left >= right {
@@ -20,7 +19,7 @@ func QuickSort[T cmp.Ordered](arr common.Searchable[T], left int, right int) {
 	pivot := findPivot(left, right)
 	pivot = partition(arr, left, right, pivot)
 	QuickSort(arr, left, pivot)
-	QuickSort(arr, pivot + 1, right)
+	QuickSort(arr, pivot+1, right)
 }
 
 func findPivot(left int, right int) int {
@@ -39,7 +38,7 @@ func partition[T cmp.Ordered](arr common.Searchable[T], left int, right int, piv
 			}
 			left++
 		}
-		
+
 		for left <= right {
 			rightVal, _ := arr.Get(right)
 			if rightVal <= pivotVal {
@@ -51,7 +50,7 @@ func partition[T cmp.Ordered](arr common.Searchable[T], left int, right int, piv
 		if left >= right {
 			return right
 		}
-		
+
 		leftVal, _ := arr.Get(left)
 		rightVal, _ := arr.Get(right)
 		arr.Set(left, rightVal)

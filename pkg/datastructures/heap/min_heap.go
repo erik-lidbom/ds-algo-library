@@ -2,9 +2,10 @@ package heap
 
 import (
 	"cmp"
-	"ds-algorithms/pkg/datastructures/array"
 	"errors"
 	"fmt"
+
+	"ds-algorithms/pkg/datastructures/array"
 )
 
 type MinHeap[T cmp.Ordered] struct {
@@ -26,9 +27,8 @@ func (mh *MinHeap[T]) BuildHeap(arr *array.ArrayList[T]) error {
 
 	for i := mid; i >= 0; i-- {
 		err := mh.siftDown(i)
-
 		if err != nil {
-            return fmt.Errorf("build heap error: failed to siftDown at index %d: %w", i, err)
+			return fmt.Errorf("build heap error: failed to siftDown at index %d: %w", i, err)
 		}
 	}
 	return nil
@@ -66,15 +66,14 @@ func (mh *MinHeap[T]) RemoveMin() (T, error) {
 		return zero, errors.New("heap is empty, cannot remove the maximum value")
 	}
 
-
 	removedVal, err := mh.heap.Get(0)
 	if err != nil {
 		return zero, fmt.Errorf("failed to retrieve element for index %d\nerror: %w", 0, err)
 	}
 
-	swap_err := array.Swap(mh.heap, 0, mh.size - 1)
+	swap_err := array.Swap(mh.heap, 0, mh.size-1)
 	if swap_err != nil {
-		return zero, fmt.Errorf("failed to swap root with last element at index %d: %w", mh.size - 1, swap_err)
+		return zero, fmt.Errorf("failed to swap root with last element at index %d: %w", mh.size-1, swap_err)
 	}
 
 	_, removeErr := mh.heap.Remove(mh.size - 1)
@@ -106,14 +105,14 @@ func (mh *MinHeap[T]) swap(i, j int) error {
 		return fmt.Errorf("failed to swap element: %w", err)
 	}
 
-	err = mh.heap.Set(i, jValue) 
+	err = mh.heap.Set(i, jValue)
 	if err != nil {
 		// Since the first swap worked as expected, we need to do a rollback.
 		rollbackErr := mh.heap.Set(j, jValue)
 		if rollbackErr != nil {
 			return fmt.Errorf("critical swap error: failed to set element at index %d (original error: %w), AND rollback for index %d failed: %w", j, err, i, rollbackErr)
 		}
-		return fmt.Errorf("failed to swap element: %w", err) 
+		return fmt.Errorf("failed to swap element: %w", err)
 	}
 
 	return nil
@@ -142,7 +141,6 @@ func (mh *MinHeap[T]) siftUp(pos int) error {
 }
 
 func (mh *MinHeap[T]) siftDown(pos int) error {
-
 	for !isLeaf(pos, mh.size) {
 		leftChild := getLeftChildIndex(pos)
 		rightChild := getRightChildIndex(pos)
