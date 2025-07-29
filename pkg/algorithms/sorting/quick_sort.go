@@ -1,13 +1,18 @@
 package sorting
 
+import (
+	"cmp"
+	"ds-algorithms/pkg/datastructures/common"
+)
 
 
-func QuickSort(arr []int, left int, right int) {
+
+func QuickSort[T cmp.Ordered](arr common.Searchable[T], left int, right int) {
 	if left >= right {
 		return
 	}
 
-	if len(arr) <= 100 {
+	if arr.Size() <= 100 {
 		InsertionSort(arr)
 		return
 	}
@@ -22,22 +27,35 @@ func findPivot(left int, right int) int {
 	return (left + right) / 2
 }
 
-func partition(arr []int, left int, right int, pivot int) int {
-	pivotVal := arr[pivot]
+func partition[T cmp.Ordered](arr common.Searchable[T], left int, right int, pivot int) int {
+	value, _ := arr.Get(pivot)
+	pivotVal := value
 
 	for {
-		for left <= right && arr[left] < pivotVal {
+		for left <= right {
+			leftVal, _ := arr.Get(left)
+			if leftVal >= pivotVal {
+				break
+			}
 			left++
 		}
-		for left <= right && arr[right] > pivotVal {
+		
+		for left <= right {
+			rightVal, _ := arr.Get(right)
+			if rightVal <= pivotVal {
+				break
+			}
 			right--
-		} 
+		}
 
 		if left >= right {
 			return right
 		}
-
-		arr[left], arr[right] = arr[right], arr[left]
+		
+		leftVal, _ := arr.Get(left)
+		rightVal, _ := arr.Get(right)
+		arr.Set(left, rightVal)
+		arr.Set(right, leftVal)
 		left++
 		right--
 	}

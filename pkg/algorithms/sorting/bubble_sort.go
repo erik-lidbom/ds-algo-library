@@ -1,13 +1,22 @@
 package sorting
 
+import (
+	"cmp"
+	"ds-algorithms/pkg/datastructures/common"
+)
 
-func BubbleSort (arr[]int) {
-	size := len(arr)
+
+func BubbleSort[T cmp.Ordered] (arr common.Searchable[T]) {
+	size := arr.Size()
 
 	for i := 0; i < size - 1; i++ {
 		for j := 0; j < size - i - 1; j++{
-			if(arr[j] > arr[j + 1]){
-				arr[j], arr[j+1] = arr[j+1], arr[j]
+			valX, _ := arr.Get(j)
+			valY, _ := arr.Get(j + 1)
+
+			if(valX > valY){
+				arr.Set(j, valY)
+				arr.Set(j + 1, valX) 
 			}
 		}
 	}

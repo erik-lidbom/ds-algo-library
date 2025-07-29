@@ -1,6 +1,7 @@
 package sorting
 
 import (
+	"ds-algorithms/pkg/datastructures/searchable"
 	"reflect"
 	"testing"
 )
@@ -20,7 +21,8 @@ func TestSelectionSort(t *testing.T) {
 	for _, c := range cases {
 		arr := make([]int, len(c.input))
 		copy(arr, c.input)
-		SelectionSort(arr)
+		currArray := searchable.SearchableSlice[int](arr)
+		SelectionSort(currArray)
 		if !reflect.DeepEqual(arr, c.expect) {
 			t.Errorf("%s: got %v, want %v", c.name, arr, c.expect)
 		}
@@ -33,6 +35,7 @@ func BenchmarkSelectionSort(b *testing.B) {
 		for i := range arr {
 			arr[i] = 1000 - i
 		}
-		SelectionSort(arr)
+		currArray := searchable.SearchableSlice[int](arr)		
+		SelectionSort(currArray)
 	}
 } 

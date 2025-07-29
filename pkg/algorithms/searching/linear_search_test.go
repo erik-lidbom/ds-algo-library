@@ -1,6 +1,9 @@
 package search
 
-import "testing"
+import (
+	"ds-algorithms/pkg/datastructures/searchable"
+	"testing"
+)
 
 func TestLinearSearch(t *testing.T) {
 	cases := []struct {
@@ -17,7 +20,8 @@ func TestLinearSearch(t *testing.T) {
 		{"not found", []int{1,2,3,4,5}, 9, 0, false},
 	}
 	for _, c := range cases {
-		idx, found := LinearSearch(c.arr, c.elem)
+		currArr := searchable.SearchableSlice[int](c.arr)
+		idx, found := LinearSearch(currArr, c.elem)
 		if found != c.expectFound || (found && idx != c.expectIdx) {
 			t.Errorf("%s: got (idx=%d, found=%v), want (idx=%d, found=%v)", c.name, idx, found, c.expectIdx, c.expectFound)
 		}
@@ -31,6 +35,7 @@ func BenchmarkLinearSearch(b *testing.B) {
 	}
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		LinearSearch(arr, 999)
+		currArr := searchable.SearchableSlice[int](arr)
+		LinearSearch(currArr, 999)
 	}
 } 

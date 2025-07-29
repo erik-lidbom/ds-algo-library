@@ -1,17 +1,26 @@
 package sorting
 
-func SelectionSort (arr[]int) {
-	size := len(arr)
+import (
+	"cmp"
+	"ds-algorithms/pkg/datastructures/common"
+)
+
+func SelectionSort[T cmp.Ordered] (arr common.Searchable[T]) {
+	size := arr.Size()
 
 	for i := 0; i < size - 1; i++ {
-		min_index := i
+		minIndex := i
 		
 		for j := i + 1; j < size; j++ {
-			if(arr[j] < arr[min_index]){
-				min_index = j
+			currVal, _ := arr.Get(j)
+			minVal, _ := arr.Get(minIndex)
+			if(currVal < minVal){
+				minIndex = j
 			}
 		}
-
-		arr[i], arr[min_index] = arr[min_index], arr[i]
+		currVal, _ := arr.Get(i)
+		minVal, _ := arr.Get(minIndex)
+		arr.Set(i, minVal)
+		arr.Set(minIndex, currVal)
 	}
 }

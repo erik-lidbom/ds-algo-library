@@ -5,12 +5,12 @@ import (
 	"ds-algorithms/pkg/datastructures/common"
 )
 
-// BinarySearch function performs binary search on a sorted array slice of type T cmp.Ordered
+// BinarySearch function performs binary search on a Searchable compatible data structure
 // Description:
 // The algorithm finds the requested element by repeatedly splitting the array slice by half. Instead of linearly search from first //element to last element, we compare the elem with the middle element. If the elem is less than the comparing element, we narrow down the search field by half and only search on the left array. This process repeatedly occurs until we find the element we are looking for or if the element do not exist.
 //
 // Time Complexity: O(log N) - since the search space halved in each iteratiom
-// Space Complexity: O(1) - since we do the sorting in-place
+// Space Complexity: O(1) - since we do the operations in-place
 //
 // Parameters:
 // data - the ordered list that the algorithm performs the search on. The list must satisfy the Searchable interface, so to use a normal slice you must cast the slice to be a searchable slice. The ArrayList struct already supports this interface.

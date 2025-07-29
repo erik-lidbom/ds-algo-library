@@ -1,6 +1,11 @@
 package sorting
 
-func MergeSort (arr []int, left int, right int) {
+import (
+	"cmp"
+	"ds-algorithms/pkg/datastructures/common"
+)
+
+func MergeSort[T cmp.Ordered] (arr common.Searchable[T], left int, right int) {
 	if left >= right {
 		return
 	}
@@ -11,29 +16,31 @@ func MergeSort (arr []int, left int, right int) {
 	merge(arr, left, mid, right)
 }
 
-func merge (arr []int, left int, mid int, right int) {
-	temp_arr := make([]int, len(arr))
+func merge[T cmp.Ordered] (arr common.Searchable[T], left int, mid int, right int) {
+	temp_arr := make([]T, arr.Size())
 
-	left_p := left
-	right_p := mid + 1
+	leftP := left
+	rightP := mid + 1
 
 	for i := left; i <= right; i++{
-		if(right_p > right) {
-			temp_arr[i] = arr[left_p]
-			left_p++
-		} else if(left_p > mid) {
-			temp_arr[i] = arr[right_p]
-			right_p++
-		} else if(arr[left_p] <= arr[right_p]){
-			temp_arr[i] = arr[left_p]
-			left_p++
+		leftVal, _ := arr.Get(leftP)
+		rightVal, _ := arr.Get(rightP)
+		if(rightP > right) {
+			temp_arr[i] = leftVal
+			leftP++
+		} else if(leftP > mid) {
+			temp_arr[i] = rightVal
+			rightP++
+		} else if(leftVal <= rightVal){
+			temp_arr[i] = leftVal
+			leftP++
 		} else {
-			temp_arr[i] = arr[right_p]
-			right_p++
+			temp_arr[i] = rightVal
+			rightP++
 		}
 	}
 
 	for i := left; i <= right; i++ {
-		arr[i] = temp_arr[i]
+		arr.Set(i, temp_arr[i])
 	}
 }

@@ -2,12 +2,13 @@ package sorting
 
 import (
 	"cmp"
-	"ds-algorithms/pkg/datastructures/array"
+	"ds-algorithms/pkg/datastructures/common"
 	"ds-algorithms/pkg/datastructures/heap"
 	"fmt"
 )
 
-func NaiveHeapsort[T cmp.Ordered](arr *array.ArrayList[T]) error {
+func NaiveHeapsort[T cmp.Ordered](arr common.
+	List[T]) error {
 
 	heap := heap.NewMinHeap[T]()
 	for i := 0; i < arr.Size(); i++ {
@@ -29,12 +30,12 @@ func NaiveHeapsort[T cmp.Ordered](arr *array.ArrayList[T]) error {
 	return nil
 }
 
-func HeapSort[T cmp.Ordered](arr *array.ArrayList[T]) error {
-	max_heap := heap.NewMaxHeap[T]()
-	max_heap.BuildHeap(arr)
+func HeapSort[T cmp.Ordered](arr common.List[T]) error {
+	maxHeap := heap.NewMaxHeap[T]()
+	maxHeap.BuildHeap(arr)
 
 	
-	_, err := max_heap.Sort()
+	_, err := maxHeap.Sort()
 	if err != nil {
 		return fmt.Errorf("failed to sort the array\nerror: %w", err)
 	}
