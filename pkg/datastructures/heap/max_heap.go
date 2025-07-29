@@ -3,12 +3,14 @@ package heap
 import (
 	"cmp"
 	"ds-algorithms/pkg/datastructures/array"
+	"ds-algorithms/pkg/datastructures/common"
+	"ds-algorithms/pkg/datastructures/searchable"
 	"errors"
 	"fmt"
 )
 
 type MaxHeap[T cmp.Ordered] struct {
-	heap *array.ArrayList[T]
+	heap common.List[T]
 	size int
 }
 
@@ -19,9 +21,9 @@ func NewMaxHeap[T cmp.Ordered]() *MaxHeap[T] {
 	}
 }
 
-func (mh *MaxHeap[T]) BuildHeap(arr *array.ArrayList[T]) error {
-	mh.heap = arr
-	mh.size = arr.Size()
+func (mh *MaxHeap[T]) BuildHeap(data common.List[T]) error {
+	mh.heap = data
+	mh.size = data.Size()
 	mid := getParent(mh.size - 1)
 
 	for i := mid; i >= 0; i-- {
@@ -75,7 +77,7 @@ func (mh *MaxHeap[T]) RemoveMax() (T, error) {
 
 	
 	
-	swap_err := array.Swap(mh.heap, 0, mh.size - 1)
+	swap_err := searchable.Swap(mh.heap, 0, mh.size - 1)
 	if swap_err != nil {
 		return zero, fmt.Errorf("failed to swap root with last element at index %d: %w", mh.size - 1, swap_err)
 	}
@@ -111,7 +113,7 @@ func (mh *MaxHeap[T]) siftUp(pos int) error {
 		if newVal <= parentVal {
 			return nil
 		}
-		array.Swap(mh.heap,pos, parent)
+		searchable.Swap(mh.heap,pos, parent)
 
 		pos = parent
 	}
@@ -153,7 +155,7 @@ func (mh *MaxHeap[T]) siftDown(pos int) error {
 			return nil
 		}
 
-		array.Swap(mh.heap, pos, maxChild)
+		searchable.Swap(mh.heap, pos, maxChild)
 		pos = maxChild
 	}
 	return nil
@@ -165,7 +167,7 @@ All heap operations will fail after calling Sort().
 To reuse the heap again you have to call the BuildHeap function
 */
 
-func (mh *MaxHeap[T]) Sort() (*array.ArrayList[T], error) {
+func (mh *MaxHeap[T]) Sort() (common.List[T], error) {
 	if mh.size == 0 {
 		return mh.heap, nil
 	}
@@ -173,7 +175,7 @@ func (mh *MaxHeap[T]) Sort() (*array.ArrayList[T], error) {
 	originalSize := mh.Size()
 
 	for i := originalSize - 1; i > 0; i-- {
-		swap_err := array.Swap(mh.heap, 0, i)
+		swap_err := searchable.Swap(mh.heap, 0, i)
 		if swap_err != nil {
 			return nil, fmt.Errorf("failed to swap root with last element at index %d: %w", mh.size - 1, swap_err)
 		}
