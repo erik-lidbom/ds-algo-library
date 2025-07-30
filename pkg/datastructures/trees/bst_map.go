@@ -92,6 +92,14 @@ func (bstm *BinarySearchTreeMap[K, V]) Delete(key K) error {
 	return fmt.Errorf("key %v not found in tree", key)
 }
 
+func (bstm *BinarySearchTreeMap[K, V]) KeysBetween(min, max K) *array.ArrayList[K] {
+	result := array.NewArrayList[K]()
+
+	if bstm.IsEmpty() || min > max {
+		return result
+	}
+}
+
 func (bstm *BinarySearchTreeMap[K, V]) TraversePreOrder(node *nodes.BinaryMapNode[K, V]) (*array.ArrayList[K], error) {
 	var zero *array.ArrayList[K]
 	arr := array.NewArrayList[K]()
@@ -203,5 +211,23 @@ func (bstm *BinarySearchTreeMap[K, V]) removeHelper(node *nodes.BinaryMapNode[K,
 
 			return node, originalNodeValue, true
 		}
+	}
+}
+
+func (bstm *BinarySearchTreeMap[K, V]) keysBetweenHelper(node *nodes.BinaryMapNode[K, V], min K, max K, result *array.ArrayList[K]) {
+	if node == nil {
+		return
+	}
+
+	if min < node.Key {
+		bstm.keysBetweenHelper(node.Left, min, max, result)
+	}
+
+	if min <= node.Key && node.Key <= max {
+		result.Add(result.Size(), node.Key)
+	}
+
+	if node.Key < max {
+		bstm.keysBetweenHelper(node.Right, min, max, result)
 	}
 }
