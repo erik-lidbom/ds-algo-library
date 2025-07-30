@@ -8,6 +8,7 @@ import (
 	"ds-algorithms/pkg/datastructures/heap"
 )
 
+// todo: add comments
 func NaiveHeapsort[T cmp.Ordered](arr common.
 	List[T],
 ) error {

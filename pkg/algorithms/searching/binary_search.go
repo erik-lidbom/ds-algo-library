@@ -7,20 +7,36 @@ import (
 )
 
 // BinarySearch function performs binary search on a Searchable compatible data structure
-// Description:
-// The algorithm finds the requested element by repeatedly splitting the array slice by half. Instead of linearly search from first //element to last element, we compare the elem with the middle element. If the elem is less than the comparing element, we narrow down the search field by half and only search on the left array. This process repeatedly occurs until we find the element we are looking for or if the element do not exist.
 //
-// Time Complexity: O(log N) - since the search space halved in each iteratiom
+// Description:
+// The algorithm finds the requested element by repeatedly splitting the array slice by half. Instead of linearly searching from the first
+// element to the last element, we compare the element with the middle element. If the element is less than the comparing element, we narrow down the
+// search field by half and only search on the left array. This process repeatedly occurs until we find the element we are looking for or
+// if the element does not exist.
+//
+// Time Complexity: O(log N) - since the search space is halved in each iteration
 // Space Complexity: O(1) - since we do the operations in-place
 //
 // Parameters:
-// data - the ordered list that the algorithm performs the search on. The list must satisfy the Searchable interface, so to use a normal slice you must cast the slice to be a searchable slice. The ArrayList struct already supports this interface.
-// elem - the elem the algorithm looks for
+//
+//	data common.Searchable[T]: The ordered list that the algorithm performs the search on.
+//	elem T: The element the algorithm looks for.
 //
 // Returns:
-// int - index of the elem, -1 if it do not exist in the slice
-// bool - if the algorithm found the elem or not
-
+//
+//	int: The index of the elem, or -1 if it does not exist in the slice.
+//	bool: True if the algorithm found the elem, false otherwise.
+//
+// Example:
+//
+//	myList := common.NewArrayList([]int{1, 2, 3, 4, 5})
+//
+//	index, found := BinarySearch(myList, 2)
+//	if found {
+//		fmt.Printf("Element found at index: %d\n", index)
+//	} else {
+//		fmt.Println("Element not found.")
+//	}
 func BinarySearch[T cmp.Ordered](data common.Searchable[T], elem T) (int, bool) {
 	leftIndex := 0
 	rightIndex := data.Size() - 1
@@ -56,15 +72,30 @@ func BinarySearch[T cmp.Ordered](data common.Searchable[T], elem T) (int, bool) 
 // Space Complexity: O(1) - since we do everything in-place
 //
 // Parameters:
-// 	data - the ordered list that the algorithm performs the search on.
-// 	The list must satisfy the Searchable interface, so to use a normal slice you must cast the slice to be a searchable slice.
-//  The ArrayList struct already supports this interface.
-// 	elem - the element to find the insertion point for
+//
+//	data common.Searchable[T]: The ordered list that the algorithm performs the search on.
+//	elem T: The element to find the insertion point for.
 //
 // Returns:
-//   bool - true if elem was found at the returned index, false otherwise.
-//   int  - The index where elem should be inserted
-
+//
+//	bool: true if elem was found at the returned index, false otherwise.
+//	int: The index where elem should be inserted.
+//
+// Example:
+//
+//	myList := common.NewArrayList([]int{10, 20, 30, 40, 50})
+//
+//	// Element 30 is found at index 2
+//	found, index := FindInsertionPoint(myList, 30)
+//	if found {
+//		fmt.Printf("Element 30 found at index: %d\n", index) // Output: Element 30 found at index: 2
+//	}
+//
+//	// Element 25 is not found, but its insertion point is index 2
+//	found, index = FindInsertionPoint(myList, 25)
+//	if !found {
+//		fmt.Printf("Element 25 not found, insertion point: %d\n", index) // Output: Element 25 not found, insertion point: 2
+//	}
 func FindInsertionPoint[T cmp.Ordered](data common.Searchable[T], elem T) (bool, int) {
 	size := data.Size()
 	if size == 0 {
@@ -110,17 +141,20 @@ func FindInsertionPoint[T cmp.Ordered](data common.Searchable[T], elem T) (bool,
 // Space Complexity: O(1) - since we do everything in-place
 //
 // Parameters:
-// 	data - the ordered list that the algorithm performs the search on.
-// 	The list must satisfy the Searchable interface, so to use a normal slice you must cast the slice to be a searchable slice.
-//  The ArrayList struct already supports this interface.
-// 	elem - the element to find the upper bound
+//
+//	data common.Searchable[T]: The ordered list that the algorithm performs the search on.
+//	elem T: The element to find the upper bound.
 //
 // Returns:
-//  bool - true if elem was found anywhere in the data structure, false otherwise.
-//  int  - The index of the first element strictly greater than elem (the upper bound).
-
-// TODO --> WRITE TEST
-
+//
+//	bool: true if elem was found anywhere in the data structure, false otherwise.
+//	int: The index of the first element strictly greater than elem (the upper bound).
+//
+// Example:
+//
+//	myList := common.NewArrayList([]int{10, 20, 30, 30, 40, 50})
+//	found, index := FindUpperBound(myList, 30)
+//	fmt.Printf("Upper bound for 30: found=%t, index=%d\n", found, index) // Output: Upper bound for 30: found=true, index=4
 func FindUpperBound[T cmp.Ordered](data common.Searchable[T], elem T) (bool, int) {
 	size := data.Size()
 	if size == 0 {
