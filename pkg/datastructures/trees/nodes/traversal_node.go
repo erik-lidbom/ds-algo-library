@@ -15,7 +15,7 @@ type TraversableNode[E cmp.Ordered] interface {
 }
 
 func PreOrderTraversal[E cmp.Ordered](node TraversableNode[E], resultArr *array.ArrayList[E]) error {
-	if node.IsNil() {
+	if node == nil || node.IsNil() {
 		return nil
 	}
 
@@ -38,7 +38,7 @@ func PreOrderTraversal[E cmp.Ordered](node TraversableNode[E], resultArr *array.
 }
 
 func PostOrderTraversal[E cmp.Ordered](node TraversableNode[E], resultArr *array.ArrayList[E]) error {
-	if node.IsNil() {
+	if node == nil || node.IsNil() {
 		return nil
 	}
 	err := PostOrderTraversal(node.GetLeft(), resultArr)
@@ -60,7 +60,7 @@ func PostOrderTraversal[E cmp.Ordered](node TraversableNode[E], resultArr *array
 }
 
 func InOrderTraversal[E cmp.Ordered](node TraversableNode[E], resultArr *array.ArrayList[E]) error {
-	if node.IsNil() {
+	if node == nil || node.IsNil() {
 		return nil
 	}
 	err := InOrderTraversal(node.GetLeft(), resultArr)

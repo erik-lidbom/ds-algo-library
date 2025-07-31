@@ -86,6 +86,10 @@ func (bst *BinarySearchTree[T]) TraversePreOrder(node *nodes.BinaryNode[T]) (*ar
 	var zero *array.ArrayList[T]
 	arr := array.NewArrayList[T]()
 
+	if node == nil {
+		return arr, nil
+	}
+
 	err := nodes.PreOrderTraversal(node, arr)
 	if err != nil {
 		return zero, err
@@ -98,6 +102,10 @@ func (bst *BinarySearchTree[T]) TraversePostOrder(node *nodes.BinaryNode[T]) (*a
 	var zero *array.ArrayList[T]
 	arr := array.NewArrayList[T]()
 
+	if node == nil {
+		return arr, nil
+	}
+
 	err := nodes.PostOrderTraversal(node, arr)
 	if err != nil {
 		return zero, err
@@ -109,6 +117,10 @@ func (bst *BinarySearchTree[T]) TraversePostOrder(node *nodes.BinaryNode[T]) (*a
 func (bst *BinarySearchTree[T]) TraverseInOrder(node *nodes.BinaryNode[T]) (*array.ArrayList[T], error) {
 	var zero *array.ArrayList[T]
 	arr := array.NewArrayList[T]()
+
+	if node == nil {
+		return arr, nil
+	}
 
 	err := nodes.InOrderTraversal(node, arr)
 	if err != nil {

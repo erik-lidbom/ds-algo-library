@@ -29,7 +29,7 @@ func (bstm *BinarySearchTreeMap[K, V]) IsEmpty() bool {
 }
 
 func (bstm *BinarySearchTreeMap[K, V]) Put(key K, value V) {
-	bstm.putHelper(bstm.root, key, value)
+	bstm.root = bstm.putHelper(bstm.root, key, value)
 }
 
 func (bstm *BinarySearchTreeMap[K, V]) Get(key K) (V, error) {
@@ -45,6 +45,10 @@ func (bstm *BinarySearchTreeMap[K, V]) Get(key K) (V, error) {
 
 func (bstm *BinarySearchTreeMap[K, V]) Remove(key K) (V, error) {
 	var zeroV V
+
+	if bstm.IsEmpty() {
+		return zeroV, fmt.Errorf("cannot remove from empty map")
+	}
 
 	newRoot, removedValue, wasRemoved := bstm.removeHelper(bstm.root, key)
 	bstm.root = newRoot
@@ -82,14 +86,11 @@ func (bstm *BinarySearchTreeMap[K, V]) Search(key K) (V, bool) {
 }
 
 func (bstm *BinarySearchTreeMap[K, V]) Delete(key K) error {
-	initialSize := bstm.size
-	bstm.root, _, _ = bstm.removeHelper(bstm.root, key)
-
-	if bstm.size < initialSize {
-		return nil
+	_, err := bstm.Remove(key)
+	if err != nil {
+		return err
 	}
-
-	return fmt.Errorf("key %v not found in tree", key)
+	return nil
 }
 
 func (bstm *BinarySearchTreeMap[K, V]) KeysBetween(min, max K) *array.ArrayList[K] {
@@ -98,6 +99,9 @@ func (bstm *BinarySearchTreeMap[K, V]) KeysBetween(min, max K) *array.ArrayList[
 	if bstm.IsEmpty() || min > max {
 		return result
 	}
+
+	bstm.keysBetweenHelper(bstm.root, min, max, result)
+	return result
 }
 
 func (bstm *BinarySearchTreeMap[K, V]) TraversePreOrder(node *nodes.BinaryMapNode[K, V]) (*array.ArrayList[K], error) {
@@ -171,12 +175,16 @@ func (bstm *BinarySearchTreeMap[K, V]) putHelper(node *nodes.BinaryMapNode[K, V]
 			Right: nil,
 		}
 	} else if key < node.Key {
-		bstm.putHelper(node.Left, key, value)
+		node.Left = bstm.putHelper(node.Left, key, value)
+		return node
 	} else if key > node.Key {
-		bstm.putHelper(node.Right, key, value)
+		node.Right = bstm.putHelper(node.Right, key, value)
+		return node
+	} else {
+
+		node.Value = value
+		return node
 	}
-	node.Value = value
-	return node
 }
 
 func (bstm *BinarySearchTreeMap[K, V]) removeHelper(node *nodes.BinaryMapNode[K, V], key K) (*nodes.BinaryMapNode[K, V], V, bool) {
